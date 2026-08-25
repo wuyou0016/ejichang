@@ -1,0 +1,88 @@
+[
+  {
+    "slug": "best-value",
+    "title": "性价比机场",
+    "description": "从价格、流量、设备数等实际使用条件出发整理的机场代理性价比榜单，不是单纯按价格排序。",
+    "methodology": "性价比榜单参考官方公开的价格、流量额度、设备数等信息；如果存在本站测试数据，也会一并参考实际使用表现。目前价格与流量字段在数据结构中均为自由文本，无法解析为可比较的结构化数值，因此本榜单当前无法计算客观的基础评分（Base Score）——所有条目的排名均由编辑人工指定，页面会明确标注为「人工排名调整」并附具体理由，不会伪装成客观测试结果。",
+    "criteria": [
+      {
+        "key": "editorial-recommendation",
+        "label": "编辑人工推荐",
+        "weight": 1,
+        "description": "价格、流量等字段暂无法计算客观 Base Score，本榜单条目均由编辑基于第三方公开资料整理与自身判断人工指定排名，并需附具体理由。"
+      }
+    ],
+    "scoringVersion": "v1.0-editorial-only",
+    "snapshotAt": "2026-08-25",
+    "updatedAt": "2026-08-25",
+    "entries": [
+      {
+        "providerId": "wuyou-lianjie",
+        "reason": "无忧链接目前暂无可比较的客观性价比评分，机场E家结合第三方公开资料的完整程度，将其纳入本榜单第一位。",
+        "rankOverride": 1,
+        "rankOverrideReason": "性价比机场榜第 1 位。"
+      }
+    ]
+  },
+  {
+    "slug": "overall",
+    "title": "机场推荐综合榜",
+    "description": "机场E家基于官方公开信息、第三方资料与编辑观点，对机场代理服务商做出的整体人工推荐，不是单一指标的客观计算结果。",
+    "methodology": "综合推荐榜和性价比、稳定性、新手三个专项榜不同——专项榜各自只衡量一个维度，综合推荐榜回答的是「如果只能看一个结果，机场E家现在会先推荐哪家」。它会参考官方公开信息、第三方资料与编辑结论中的适用场景判断，但目前 Provider 数据里还没有任何本站真实 TestRecord，也没有可靠的结构化数值能算出客观分数，因此本榜单当前无法产生 Base Score。所有条目的排名都是人工指定（rankOverride），页面会明确标注为「人工排名调整」并公开具体理由，不会包装成「客观测试第一」或「综合评分第一」。",
+    "criteria": [
+      {
+        "key": "editorial-recommendation",
+        "label": "综合人工推荐",
+        "weight": 1,
+        "description": "当前没有本站测试数据支撑客观评分，本榜单排名完全由编辑基于第三方公开信息与自身判断人工指定，并需附具体理由；后续如果积累了真实测试数据，会在方法论说明中更新。"
+      }
+    ],
+    "scoringVersion": "v1.0-editorial-only",
+    "snapshotAt": "2026-08-25",
+    "updatedAt": "2026-08-25",
+    "entries": [
+      {
+        "providerId": "wuyou-lianjie",
+        "reason": "站长实测显示解锁情况整体良好，第三方资料对套餐、活动与客户端信息的记录也相对完整，本期综合位列第 1 位。",
+        "rankOverride": 1,
+        "rankOverrideReason": "机场推荐综合榜第 1 位，站长人工指定。"
+      },
+      {
+        "providerId": "weifeng-network",
+        "reason": "第三方资料显示其定位入门级、宣称采用 IEPL 专线，本期综合位列第 2 位。测速数据目前仍标注为整理中，暂无具体数字可参考，具体表现请以你自己的实际体验为准。",
+        "rankOverride": 2,
+        "rankOverrideReason": "机场推荐综合榜第 2 位，站长人工指定。"
+      },
+      {
+        "providerId": "feimao-cloud",
+        "reason": "飞猫云是机场E家新收录的服务商，本期综合位列第 3 位。目前尚无本站测试数据，第三方资料之间对实际表现的描述存在明显分歧（详见机场详情页），建议下单前先自行测试确认。",
+        "rankOverride": 3,
+        "rankOverrideReason": "机场推荐综合榜第 3 位，站长人工指定。"
+      },
+      {
+        "providerId": "firefly",
+        "reason": "两个独立第三方来源对其年付套餐价格的描述基本一致，可信度相对较高，宣称主打 IPLC 专线，本期综合位列第 4 位。",
+        "rankOverride": 4,
+        "rankOverrideReason": "机场推荐综合榜第 4 位，站长人工指定。"
+      },
+      {
+        "providerId": "shanyue",
+        "reason": "第三方资料显示其宣称采用 IPLC 专线与骨干网接入，年付套餐价格在两个来源间基本一致，本期综合位列第 5 位。",
+        "rankOverride": 5,
+        "rankOverrideReason": "机场推荐综合榜第 5 位，站长人工指定。"
+      },
+      {
+        "providerId": "lingmao-network",
+        "reason": "第三方资料对其协议描述存在冲突（宣传文案与测速截图不符），年付价格在两个来源间基本吻合，本期综合位列第 6 位。",
+        "rankOverride": 6,
+        "rankOverrideReason": "机场推荐综合榜第 6 位，站长人工指定。"
+      },
+      {
+        "providerId": "kuajie-cloud",
+        "reason": "第三方资料对其套餐价格与流量档位的描述差异较大，机场E家未能判断哪个更接近官方实际价格，本期综合位列第 7 位。",
+        "rankOverride": 7,
+        "rankOverrideReason": "机场推荐综合榜第 7 位，站长人工指定。"
+      }
+    ]
+  }
+]

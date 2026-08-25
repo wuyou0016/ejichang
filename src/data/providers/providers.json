@@ -1,0 +1,464 @@
+[
+  {
+    "id": "wuyou-lianjie",
+    "slug": "wuyou-lianjie",
+    "name": "无忧链接",
+    "aliases": ["无忧", "Wuyou"],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://vip02.worryfreeaff.com/#/?code=XT1WDPvr",
+      "description": "官方入口页面为验证码校验页，需要手动输入图形验证码才能继续访问后续的登录或注册流程，本站未在完成验证码的情况下查看到具体套餐、流量或节点信息。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://vip02.worryfreeaff.com/#/?code=XT1WDPvr",
+        "retrievedAt": "2026-08-10",
+        "claim": "访问官方入口时展示为验证码校验页面，要求输入图形验证码后才能继续，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/wuyou-review",
+        "claim": "该网站介绍无忧链接起步价约 6.5 元/月（年付），含 40GB 流量，宣称全线节点无倍率限制，覆盖香港、新加坡、日本、美国等地区，支付方式含支付宝、微信、USDT-TRC20，并提供专属优惠码 wuyou666。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/wuyou-review",
+        "claim": "该网站自述的测速结果显示：香港节点均速约 390-550 MB/s，新加坡约 110-350 MB/s，日本/台湾约 60-190 MB/s，美国约 12-18 MB/s；并声称 Netflix、Disney+、YouTube、HBO Max、TikTok、Spotify、ChatGPT、Claude 等服务「完美支持」或「原生解锁」，Gemini 视节点而定。以上均为该网站自行测试与描述的结果，非本站实测。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "二毛（ermao.net）",
+        "sourceUrl": "https://www.ermao.net/blog/wuyoulink/",
+        "claim": "该网站 2026-08-04 更新的资料与「机场Clash」的价格描述明显不同：列出舒心链接 12.92 元/月 100GB（活动价）、省心链接 22.44 元/月 200GB、随心链接 52.36 元/月 500GB、忘忧链接 117 元/月 1TB，以及 mini 链接 79 元/年 40GB；而「机场Clash」给出的是「起步价约 6.5 元/月（年付）、40GB」。两个第三方来源的具体数字无法互相印证，本站不选择其中之一作为准确值，请以官方当前套餐页面为准。该网站还称服务商宣传支持 Netflix、Disney+、HBO、Hulu 等流媒体及 ChatGPT、Gemini，并称完全不限制连接设备数与速率，明确提示以上解锁与限速描述均为服务商自述，需自行验证。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/wuyou-review",
+        "claim": "该网站称无忧链接定位偏向轻度用户和小型跨境电商，节点协议描述为「支持市面上主流的各类翻墙协议」（未点名具体协议），客户端方面称「支持一键便捷订阅，兼容 Clash、Shadowrocket、Surge 等主流客户端」；并提到部分节点支持 TikTok 跨区直连，晚高峰（20:00-23:00）可能因同时在线人数较多受到影响。以上均为该网站的描述，未提及具体线路类型（如是否为专线），本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/wuyoulianjie/",
+        "claim": "另一个独立第三方站点「机场YYDS」（jichangyyds.com）在其无忧链接品牌页面记录的套餐价格为：Mini链接 79 元/年 40GB（约合 6.6 元/月）、舒心链接 19 元/月 100GB、省心链接 33 元/月 200GB、随心链接 77 元/月 500GB、忘忧链接 117 元/月 1TB，以及两档一次性流量包：100GB 108 元、300GB 298 元，新用户优惠码 wuyou666。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/wuyoulianjie/",
+        "claim": "「机场YYDS」的资料显示，无忧链接协议为 VLESS / Trojan / Hysteria2，目前暂时关闭了通用订阅链接入口，第三方客户端需要改用官方自研客户端；节点架构图标注覆盖香港、日本、新加坡、美国。关于 AI 服务，该网站注明 ChatGPT 需要原生 IP 才能使用，其他流媒体/AI 服务的解锁情况标注为「尚未实测」，未给出具体测速数字。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      }
+    ],
+    "editorial": {
+      "pros": [
+        "站长实测：50 个 Vless 节点的 YouTube / Netflix / Disney+ 解锁检测中，49 个节点均显示对应地区解锁，覆盖香港、日本、新加坡、台湾、美国"
+      ],
+      "cons": [
+        "官方入口为验证码校验页面，机场E家未能核实官方套餐、流量、协议等具体信息",
+        "第三方资料给出的起步价至少有三个互相不一致的版本（约 6.5 元/月、12.92 元/月、19 元/月起），差距较大，购买前务必以官网当前结算页为准",
+        "第三方资料中的测速与流媒体/AI 解锁描述均为对方自行测试或自述的结果，机场E家未做独立核验",
+        "多个第三方资料对流媒体/AI 服务的解锁描述高度相似，疑似存在模板化内容，仅供参考",
+        "第三方资料未点名具体协议或线路类型（专线/中转），信息完整度低于其他几家收录服务商",
+        "有资料显示通用订阅链接入口目前暂时关闭，需改用官方自研客户端，建议下单前先确认客户端兼容性",
+        "站长实测中，香港 HKG-01 节点的 YouTube 解锁结果为「送中(CN)」，与同批其他香港节点结果不一致，说明节点表现存在个体差异，不能只看整体解锁比例；实测速度也有明显波动（新加坡节点速度区间从 17.59KB 到 352.70MB 不等）"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "无忧链接的官方入口目前是验证码校验页面，机场E家未能在完成验证码的情况下查看具体套餐与节点信息。公开可查的资料来自「机场Clash」「二毛」「机场YYDS」三个第三方站点，对起步价的描述并不一致（约 6.5 元/月起 40GB，另一说 12.92 元/月起 100GB，还有一说月付 19 元起），机场E家不对这些互相冲突的数字做取舍或折中，具体请以你访问官网时看到的当前价格为准。站长本人使用 MiaoKo 工具对 50 个节点做过实测，整体解锁情况良好，但个别节点存在异常、速度波动也较大，具体见下方「本站测试」。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-10",
+        "claim": "套餐与官方信息部分基于第三方公开资料整理，未经本站核实；测速与解锁部分为站长本人使用 MiaoKo 工具的实测，详见下方「本站测试」。"
+      }
+    },
+    "lastVerified": "2026-08-10",
+    "createdAt": "2026-08-10",
+    "updatedAt": "2026-08-10"
+  },
+  {
+    "id": "weifeng-network",
+    "slug": "weifeng-network",
+    "name": "微风网络",
+    "aliases": ["微风", "Breeze"],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://wep01.breezenetaff.com/#/?code=XzOO248D",
+      "description": "官方入口页面要求先完成账户注册（填写邮箱、密码并同意服务条款）才能进入后续页面，本站未创建账户，因此未能查看具体套餐、流量或节点信息。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://downloadshare.breezenetttt.sbs/#/?code=XQTYodgC",
+        "retrievedAt": "2026-08-10",
+        "claim": "访问官方入口时展示为账户注册页面，要求填写邮箱地址、密码并同意服务条款，未创建账户，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/weifeng-review",
+        "claim": "该网站介绍微风网络（页面中也称「微风」/Breeze）定位入门级，起步价约 11 元/月（年付），含 100GB 流量，宣称采用 IEPL 专线与 VLESS 协议，节点覆盖香港、新加坡、日本、美国等地区，支付方式含支付宝、微信、USDT-TRC20，专属优惠码 weifeng90。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/weifeng-review",
+        "claim": "该网站页面标注「测速图表与详细节点测试报告整理中，即将上线」，即目前未提供具体测速数字；同时声称 Netflix、Disney+、YouTube、HBO Max、TikTok、Spotify、ChatGPT、Claude 等服务「完美支持」或「原生解锁」，Gemini 视节点而定。以上为该网站自行描述的结果，非本站实测。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/weifeng-review",
+        "claim": "该网站称微风网络客户端方面「支持一键便捷订阅，兼容 Clash、Shadowrocket、Surge 等主流客户端」，并在 FAQ 中提示主要使用 VLESS 协议，如果客户端版本过旧可能出现无法解析节点的情况，建议更新到较新客户端。以上为该网站的描述，本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/weifengwangluo/",
+        "claim": "另一个独立第三方站点「机场YYDS」（jichangyyds.com）记录的微风网络套餐为：清风 100GB/月（年付 137 元，约合 11.4 元/月）、乘风 200GB/月（月付 27 元）、破风 500GB/月（月付 57 元）、御风 1.2TB/月（月付 127 元），另有一次性流量包 270GB 200 元、570GB 370 元，优惠码 weifeng90。该网站在其收录的 21 家在营机场中，将微风网络列为价格最高一档，并提醒「高价不等于高质，付这个价格之前，务必确认它给的是专线而不是包装过的中转」，同时明确注明尚未对微风网络进行独立测速或解锁测试。以上为该网站自己的资料与观点，不代表本站立场，本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/weifengwangluo/",
+        "claim": "「机场YYDS」的资料显示，微风网络协议为 VLESS / Trojan / Hysteria2，宣称国内中转节点位于上海、广州；该网站同时提示部分第三方客户端不支持其订阅格式，建议购买前先向客服确认兼容性。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      }
+    ],
+    "editorial": {
+      "pros": [],
+      "cons": [
+        "官方入口需要先注册账户，机场E家未创建账户核实具体套餐与节点信息",
+        "第三方资料中的测速数据标注为「整理中，即将上线」，目前没有任何测速数字可供参考",
+        "流媒体/AI 服务解锁描述来自第三方资料且在多个服务商页面间高度相似，机场E家未做独立核验",
+        "两个独立第三方来源均未提供可信的测速或解锁验证，购买前建议自行验证实际表现",
+        "「机场YYDS」提示微风网络在其收录的 21 家在营机场中定价偏高，建议购买前先确认线路是否为专线"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "微风网络的官方入口需要先注册账户才能查看后续内容，机场E家未创建账户核实套餐与节点信息。公开资料主要来自「机场Clash」「机场YYDS」两个第三方站点，两者记录的套餐结构基本可以对应，但具体测速数据目前仍标注为「整理中」，暂无可参考的数字。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-10",
+        "claim": "基于第三方公开资料整理形成的编辑判断，未经本站实测验证。"
+      }
+    },
+    "lastVerified": "2026-08-10",
+    "createdAt": "2026-08-10",
+    "updatedAt": "2026-08-10"
+  },
+  {
+    "id": "firefly",
+    "slug": "firefly",
+    "name": "Firefly",
+    "aliases": [],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://vip02.fireflyaff.com/#/?code=Rmc0fhp4",
+      "description": "官方入口页面要求先完成账户注册（填写邮箱、密码并同意服务条款）才能进入后续页面，本站未创建账户，因此未能查看具体套餐、流量或节点信息。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://fire.fireflytttt.sbs/#/?code=Rmc0fhp4",
+        "retrievedAt": "2026-08-10",
+        "claim": "访问官方入口时展示为账户注册页面，要求填写邮箱地址、密码并同意服务条款，未创建账户，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/firefly-review",
+        "claim": "该网站介绍 Firefly 宣称主打 IPLC 专线与 VLESS 协议，起步价约 8 元/月（年付），含 60GB 流量，节点覆盖香港、新加坡、日本、台湾等地区，并在首页展示该品牌综合评分为 4.9/5.0 等汇总数据，支付方式含支付宝、微信、USDT-TRC20，专属优惠码 firefly。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/firefly-review",
+        "claim": "该网站自述的测速结果显示：香港节点均速约 500 MB/s、峰值 630+ MB/s，新加坡约 330-520 MB/s，日本/台湾约 30-170 MB/s；并声称 Netflix、Disney+、YouTube、HBO Max、TikTok、Spotify、ChatGPT、Claude 等服务「完美支持」或「原生解锁」，Gemini 视节点而定。以上均为该网站自行测试与描述的结果，非本站实测。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "二毛（ermao.net）",
+        "sourceUrl": "https://www.ermao.net/blog/firefly-airport/",
+        "claim": "该网站 2026-08-03 更新的资料显示，年付版 96 元/年（折合约 8 元/月）、含 60GB/月，这一价格与「机场Clash」给出的「起步价约 8 元/月（年付）、60GB」基本一致；同时补充了月付档位（Lite 25 元/月 150GB、Plus 45 元/月 300GB、Blaze 85 元/月 600GB、Nova 150 元/月 1000GB）以及一次性 100 元/100GB 流量包。该网站还提到：服务商称采用 IPLC 专线、VLESS 协议、原生 IP，不限制客户端和设备数量；通用订阅链接目前需要联系客服索取，前台暂未开放直接复制。以上均为服务商自述，未经本站独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/firefly/",
+        "claim": "另一个独立第三方站点「机场YYDS」（jichangyyds.com）记录的 Firefly 套餐价格与「二毛」已记录的数据基本一致：Lite 25 元/月 150GB、Plus 45 元/月 300GB、Blaze 85 元/月 600GB、Nova 150 元/月 1000GB、年付版 96 元/年 60GB，以及一次性流量包 100GB 100 元，优惠码 firefly。协议方面该网站记录为 VLESS / Trojan / Hysteria2。该网站明确写明 Firefly 需要使用官方自研客户端，Clash、Shadowrocket、v2rayN 等第三方客户端不兼容——这与「二毛」资料中「通用订阅链接需要联系客服索取」的说法不完全一致，两个第三方来源对这一点的表述存在差异，本站分别保留，不自行判断。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      }
+    ],
+    "editorial": {
+      "pros": [],
+      "cons": [
+        "官方入口需要先注册账户，机场E家未创建账户核实具体套餐与节点信息",
+        "现有测速与流媒体/AI 解锁描述均来自第三方资料，机场E家未做独立核验",
+        "关于第三方客户端兼容性，不同第三方来源的说法存在出入（是否需要官方自研客户端），建议下单前直接向客服确认",
+        "流媒体/AI 解锁描述在多个服务商页面间高度相似，疑似模板化内容，仅供参考"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "Firefly 的官方入口需要先注册账户，机场E家未创建账户核实套餐与节点信息。「机场Clash」与「二毛」两个独立第三方来源对年付套餐（约 8 元/月、60GB）的价格描述基本一致，但对于第三方客户端是否兼容存在出入——「机场YYDS」记录需使用官方自研客户端，「二毛」的表述则暗示可联系客服获取通用订阅链接，机场E家不对这一分歧做判断。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-10",
+        "claim": "基于第三方公开资料整理形成的编辑判断，未经本站实测验证。"
+      }
+    },
+    "lastVerified": "2026-08-10",
+    "createdAt": "2026-08-10",
+    "updatedAt": "2026-08-10"
+  },
+  {
+    "id": "lingmao-network",
+    "slug": "lingmao-network",
+    "name": "灵猫网络",
+    "aliases": ["灵猫", "Lingmao"],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://kshare.civetnettttt.homes/#/?code=0BJsagiX",
+      "description": "官方入口首先展示一个提示性的过渡页面，点击「继续」后进入账户注册页面（填写邮箱、密码并同意服务条款），本站未创建账户，因此未能查看具体套餐、流量或节点信息。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://kshare.civetnettttt.homes/#/?code=0BJsagiX",
+        "retrievedAt": "2026-08-10",
+        "claim": "访问官方入口时先展示过渡页面，点击「继续」后进入账户注册页面，要求填写邮箱地址、密码并同意服务条款，未创建账户，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/lingmao-review",
+        "claim": "该网站介绍灵猫网络（页面中也称「灵猫」/Lingmao）宣称主打 IPLC 专线，起步价约 7.1 元/月（年付），含 45GB 流量，节点覆盖香港、新加坡、日本、美国等地区，支付方式含支付宝、微信、USDT-TRC20，专属优惠码 lingmao。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/lingmao-review",
+        "claim": "该网站自述的测速结果显示：香港节点均速约 420-540 MB/s、峰值接近或超过 600 MB/s，新加坡约 210-320 MB/s，日本/台湾约 70-170 MB/s，美国约 10 MB/s；并声称 Netflix、Disney+、YouTube、HBO Max、TikTok、Spotify、ChatGPT、Claude 等服务「完美支持」或「原生解锁」，Gemini 视节点而定。以上均为该网站自行测试与描述的结果，非本站实测。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "二毛（ermao.net）",
+        "sourceUrl": "https://www.ermao.net/blog/civetnet-airport/",
+        "claim": "该网站 2026-08-03 更新的资料显示，年付小包为 85 元/年、45GB（折合约 7.08 元/月），与「机场Clash」给出的起步价基本吻合；但同时列出了其他档位（月付 25 元/150GB、45 元/300GB）。该网站特别指出：服务商文案宣称「新 SS 协议」，但其提供的测速截图协议栏均显示为 Vless，二者表述冲突；支付渠道对 USD 与 USDT 的说明也不一致。以上信息均来自服务商提供的资料，该网站明确注明未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/lingmao-review",
+        "claim": "该网站的 FAQ 中提到，灵猫网络「官方宣称不限制设备数量」，但这通常指合理范围内的家用多设备，如果是恶意滥用或大量分享账号，依然会触发风控导致封号；该网站还提示灵猫网络主要侧重网页浏览和流媒体，并未针对游戏场景做专门线路优化。以上为该网站的描述，本站未做独立核验。",
+        "date": "2026-08-10"
+      }
+    ],
+    "editorial": {
+      "pros": [],
+      "cons": [
+        "官方入口需要先注册账户，机场E家未创建账户核实具体套餐与节点信息",
+        "第三方资料存在内部矛盾：宣传文案称「新 SS 协议」，测速截图显示协议为 Vless，实际协议存疑",
+        "现有测速与流媒体/AI 解锁描述均来自第三方资料，机场E家未做独立核验",
+        "流媒体/AI 解锁描述在多个服务商页面间高度相似，疑似模板化内容，仅供参考",
+        "第三方资料提示该服务主要针对网页浏览与流媒体场景，未见针对游戏场景的专门线路优化"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "灵猫网络的官方入口需要先注册账户，机场E家未创建账户核实套餐与节点信息。「机场Clash」与「二毛」两个第三方来源对年付小包价格（约 7 元/月出头、45GB）基本吻合，但协议描述存在冲突——宣传文案称「新 SS 协议」，第三方测速截图显示的协议栏却是 Vless，机场E家未能判断实际使用哪种协议。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-10",
+        "claim": "基于第三方公开资料整理形成的编辑判断，未经本站实测验证。"
+      }
+    },
+    "lastVerified": "2026-08-10",
+    "createdAt": "2026-08-10",
+    "updatedAt": "2026-08-10"
+  },
+  {
+    "id": "shanyue",
+    "slug": "shanyue",
+    "name": "闪跃",
+    "aliases": ["闪跃机场", "FlashLeap"],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://wep01.flashleapaff.com/#/?code=D3N30Gco",
+      "description": "官方入口页面为验证码校验页，需要手动输入图形验证码才能继续访问后续的登录或注册流程，本站未在完成验证码的情况下查看到具体套餐、流量或节点信息。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://hello.flashleapttt.homes/#/?code=thhzjXNk",
+        "retrievedAt": "2026-08-10",
+        "claim": "访问官方入口时展示为验证码校验页面，要求输入图形验证码后才能继续，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/shanyue-review",
+        "claim": "该网站介绍闪跃（页面中也称「闪跃机场」/FlashLeap）宣称采用 IPLC 专线与骨干网接入，起步价约 8 元/月（年付），含 60GB 流量，节点覆盖香港、新加坡、日本、台湾、美国等地区，支付方式含支付宝、微信、USDT-TRC20，专属优惠码 shanyue。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/shanyue-review",
+        "claim": "该网站自述的测速结果显示：香港节点均速约 500-550 MB/s、峰值超过 600 MB/s，新加坡约 200-420 MB/s，日本约 100-190 MB/s，台湾约 47-90 MB/s，美国约 8-14 MB/s；并声称 Netflix、Disney+、YouTube、HBO Max、TikTok、Spotify、ChatGPT、Claude 等服务「完美支持」或「原生解锁」，Gemini 视节点而定。以上均为该网站自行测试与描述的结果，非本站实测。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/shanyue/",
+        "claim": "另一个独立第三方站点「机场YYDS」（jichangyyds.com）记录的闪跃套餐为：闪动 150GB/月（月付 24 元）、飞跃 300GB/月（月付 44 元）、瞬移 600GB/月（月付 84 元）、跃迁 1TB/月（月付 134 元）、年付版 60GB/月（96 元/年，约合 8 元/月）。年付版价格与「机场Clash」记录的起步价一致。该网站还记录了优惠码 shanyue（新人优惠，限用 1 次，有效期至 2026-08-31）。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/shanyue/",
+        "claim": "「机场YYDS」记录的闪跃延迟数据（单次测试，机场方提供）为：香港约 90-95ms、新加坡约 76-86ms、台湾约 120-154ms、日本约 130-139ms、美国约 242-246ms，该网站注明「试验性结果，仅供参考」；流媒体解锁方面，数据来源标注为服务商自行提供的测试报告。该网站还记录闪跃对应域名注册于 2026-07-01，提示「域名注册不足一年，属于新站」。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      }
+    ],
+    "editorial": {
+      "pros": [],
+      "cons": [
+        "官方入口为验证码校验页面，机场E家未能核实官方套餐、流量、协议等具体信息",
+        "现有测速与流媒体/AI 解锁描述均来自第三方资料，机场E家未做独立核验",
+        "「机场YYDS」记录的延迟数据由服务商自行提供且标注为试验性结果，不是独立第三方实测",
+        "流媒体/AI 解锁描述在多个服务商页面间高度相似，疑似模板化内容，仅供参考",
+        "第三方资料提示该服务关联域名注册时间较短，建议先以月付或小额套餐观察一段时间再决定是否长期使用"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "闪跃的官方入口目前是验证码校验页面，机场E家未能在完成验证码的情况下核实官方套餐与节点信息。公开资料主要来自「机场Clash」及「机场YYDS」两个第三方站点，年付套餐价格（约 8 元/月、60GB）在两个来源间基本一致，「机场YYDS」并提示该服务关联域名注册时间较短，运营历史尚待观察。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-10",
+        "claim": "基于第三方公开资料整理形成的编辑判断，未经本站实测验证。"
+      }
+    },
+    "lastVerified": "2026-08-10",
+    "createdAt": "2026-08-10",
+    "updatedAt": "2026-08-10"
+  },
+  {
+    "id": "kuajie-cloud",
+    "slug": "kuajie-cloud",
+    "name": "跨界云",
+    "aliases": [],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://vip02.kuajieaff.com/#/?code=vpWqNn1o",
+      "description": "官方入口首先展示一个提示性的过渡页面，点击「继续」后进入账户注册页面（填写邮箱、密码并同意服务条款），本站未创建账户，因此未能查看具体套餐、流量或节点信息。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://asfaf.kuajiecloudtttt.xyz/#/?code=9AnrhAhm",
+        "retrievedAt": "2026-08-10",
+        "claim": "访问官方入口时先展示过渡页面，点击「继续」后进入账户注册页面，要求填写邮箱地址、密码并同意服务条款，未创建账户，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场Clash（jichang-clash.com）",
+        "sourceUrl": "https://jichang-clash.com/blog/kuajie-review",
+        "claim": "该网站在对比表中标注跨界云起步价约 8 元/月（年付）、含 60GB 流量，但在同一网站的评测正文中又描述其「提供多档流量套餐，流量额度覆盖 120GB 到 1500GB」——两处表述的最低流量档位不一致，具体以官方套餐页面为准。节点覆盖香港、新加坡、日本等地区，支付方式含支付宝、微信、USDT-TRC20，专属优惠码 kuajie。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "二毛（ermao.net）",
+        "sourceUrl": "https://www.ermao.net/blog/kuajiecloud-airport/",
+        "claim": "该网站 2026-08-03 更新的资料显示套餐结构为：轻云 Lite 20 元/月 120GB、跃云 Leap 40 元/月 300GB、凌云 Soar 100 元/月 700GB、无界 Infinity 180 元/月 1500GB（均另有季付/年付选项）。这与「机场Clash」对比表标注的「8 元/月、60GB」不一致，但流量档位区间与「机场Clash」评测正文提到的「覆盖 120GB 到 1500GB」大致对应。以上为该网站记录的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "机场YYDS（jichangyyds.com）",
+        "sourceUrl": "https://www.jichangyyds.com/brands/kuajieyun/",
+        "claim": "另一个独立第三方站点「机场YYDS」（jichangyyds.com）记录的跨界云套餐为第三个价格版本：跨界年付版 60GB（96 元/年，约合 8 元/月）、轻云 Lite 120GB（月付 20 元）、跃云 Leap 330GB（月付 40 元）、凌云 Soar 830GB（月付 90 元）、无界 Infinity 1800GB（月付 130 元）。三个第三方来源在流量档位命名上基本对应，但具体流量数字和价格均有出入，本站不自行选择或折中，分别记录。该网站在其收录的 21 家在营机场中将跨界云排在价格由低到高的第 10 位，并提示「2026 年新开站点，运营时长短，建议先月付或小额年付试水」。以上均为该网站自己的资料与观点，不代表本站立场，本站未做独立核验。",
+        "date": "2026-08-10"
+      },
+      {
+        "source": "站长提供的资料",
+        "claim": "站长提供的资料记录了跨界云订阅链接的发放机制：订阅链接为人工发放，每条订阅链接只能使用一次，发出后约 5 小时可能失效，且用浏览器直接打开订阅链接可能导致链接失效。以上为站长提供的资料，本站未做独立核验。",
+        "date": "2026-08-10"
+      }
+    ],
+    "editorial": {
+      "pros": [],
+      "cons": [
+        "官方入口需要先注册账户，机场E家未创建账户核实具体套餐与节点信息",
+        "三个第三方来源给出的套餐价格与流量档位差异较大，机场E家未能判断哪个更接近官方当前实际价格",
+        "现有测速数据多为服务商自行提供的单次结果或仍标注「整理中」，流媒体/AI 解锁描述也来自第三方资料，均未经独立核验",
+        "有资料显示订阅链接为一次性发放，约 5 小时后可能失效，购买后需尽快正确导入",
+        "第三方资料提示该服务为较新开设站点，运营时长较短，建议先以月付或小额套餐观察"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "跨界云的官方入口需要先注册账户，机场E家未创建账户核实套餐与节点信息。三个第三方来源（机场Clash、二毛、机场YYDS）给出的套餐价格与流量档位互不一致，差距明显，机场E家不对这些数字做取舍或折中，具体请以官网当前页面为准。另有资料显示订阅链接为人工发放且可能在约 5 小时后失效，需要留意及时正确导入。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-10",
+        "claim": "基于第三方公开资料整理形成的编辑判断，未经本站实测验证。"
+      }
+    },
+    "lastVerified": "2026-08-10",
+    "createdAt": "2026-08-10",
+    "updatedAt": "2026-08-10"
+  },
+  {
+    "id": "feimao-cloud",
+    "slug": "feimao-cloud",
+    "name": "飞猫云",
+    "aliases": ["FlyCat"],
+    "status": "active",
+    "vendor": {
+      "officialWebsite": "https://ff01.feimaott.sbs/#/home?code=Lo8wndrN",
+      "description": "机场E家的自动化访问工具未能成功打开官方入口页面（请求被拒绝/加载失败），暂未能核实官方套餐、流量或节点信息，以下内容整理自第三方公开资料，建议你直接在浏览器中访问官网确认最新情况。",
+      "source": {
+        "type": "vendor",
+        "sourceUrl": "https://ff01.feimaott.sbs/#/home?code=Lo8wndrN",
+        "retrievedAt": "2026-08-25",
+        "claim": "自动化工具访问官方入口时请求被拒绝或加载失败，未能查看具体套餐与节点信息。"
+      }
+    },
+    "thirdPartyNotes": [
+      {
+        "source": "机场推荐（clashnodes.net）",
+        "sourceUrl": "https://www.clashnodes.net/brands/feimaoyun",
+        "claim": "该网站记录的飞猫云套餐为：学生版 84 元/年 50GB、星耀版 25 元/月 150GB、星环版 45 元/月 300GB、银河版 85 元/月 600GB、宇宙版 150 元/月 1.0TB、不限时套餐 680 元（一次性 1.0TB）、定制套餐 550 元/月 500GB，并称周期折扣为「年付8折/两年7折/三年6折」。技术规格描述为「全线IPLC专线」「单节点峰值2.5Gbps」「全节点x1倍率」，宣称解锁 Netflix、Disney+、ChatGPT、TikTok，覆盖 15 个地区，设备数不限。该网站明确注明：「以下检测报告由合作方提供，不是本站实测」「本站不发布速度与延迟数字」。页面标注要点更新于 2026-07-27，数据采集日期为 2026-07-25。",
+        "date": "2026-08-25"
+      },
+      {
+        "source": "机场榜GateRank（gate-rank.com）",
+        "sourceUrl": "https://gate-rank.com/airports/flycat-flycatvipaff",
+        "claim": "该网站基于持续监测（非单次测速）给出的 2026-08-10 报告显示：中位延迟 165.52ms，下载速率约 0.69 Mbps，代理请求失败率 100%，30 天可用率 100%；流媒体与解锁能力标注为「未收录」。该网站还给出风险评估：当前状态为「正常，未被标记为跑路」，风险惩罚分数 29.72，近期投诉 0 条，历史异常 0 次。下载速率与失败率这两项数字与「机场推荐」等站点描述的「专线稳定、2.5Gbps峰值」明显不符，机场E家未能判断这是监测方法差异、临时故障还是其他原因，如实并列记录，不替读者下结论。",
+        "date": "2026-08-25"
+      },
+      {
+        "source": "机场查（jichangcha.com）",
+        "sourceUrl": "https://www.jichangcha.com/brands/feimao/",
+        "claim": "该网站记录的入门套餐为「7 元/月起 50GB（年付）」，与「机场推荐」记录的学生版（84 元/年，折合 7 元/月，50GB）一致，是两个独立第三方来源中少见能互相印证的价格点。该网站还记录协议为 Shadowsocks / Trojan / VLESS，优惠码 flycat888，新用户季付以上 8 折；客户端方面称「自研客户端，新手一键上手」，第三方客户端订阅导入「需联系在线客服」；其测速数据的测试环境标注为 Clash Verge Rev v1.5x、2026-06-01 晚高峰 20:30，同时提到「热门时段香港节点偶有排队」。以上均为该网站自行测试或描述的结果，非本站实测。",
+        "date": "2026-08-25"
+      }
+    ],
+    "editorial": {
+      "pros": [],
+      "cons": [
+        "机场E家的自动化工具未能成功打开官方入口页面，暂未核实官方套餐与节点信息，以下内容整理自第三方公开资料",
+        "第三方监测站「机场榜GateRank」2026-08-10 的报告显示下载速率约 0.69 Mbps、代理请求失败率 100%，与「机场推荐」「机场查」等评测站宣传的「IEPL专线、2.5Gbps峰值、晚高峰稳定」明显不符，机场E家未能判断这反映的是长期问题还是临时故障，购买前建议自行测试确认",
+        "「肥猫云」（fmcloud.org）与「飞猫云」名称高度相似，机场E家未能确认二者是否为同一服务，为避免信息混淆，本页只采用明确使用「飞猫云」这一名称、且相互印证的第三方资料",
+        "第三方客户端的订阅导入方式说法不完全一致，其中一处提到需要联系在线客服，暂未看到自助生成订阅链接的说明",
+        "现有测速与流媒体/AI 解锁描述均来自第三方资料或第三方监测，机场E家未做独立核验"
+      ],
+      "suitableFor": [],
+      "notSuitableFor": [],
+      "summary": "飞猫云是机场E家新收录的服务商，目前尚无本站测试数据，以下内容基于第三方公开资料初步整理，站长后续会补充真实实测数据。机场E家的自动化工具未能打开官方入口页面核实套餐信息。「机场推荐」与「机场查」两个独立第三方来源对入门套餐（约 7 元/月起、50GB、年付）的描述基本一致，但第三方监测站「机场榜GateRank」在 2026-08-10 的报告显示下载速率与代理请求成功率明显异常，与「专线稳定」的宣传说法有明显出入——这一点机场E家认为需要特别提醒：具体表现请以你自己实际测试为准，不要仅凭套餐便宜就下单。",
+      "source": {
+        "type": "editorial",
+        "retrievedAt": "2026-08-25",
+        "claim": "基于第三方公开资料与第三方监测数据整理形成的初步编辑判断，未经本站实测验证，后续会随站长提供的真实测试数据更新。"
+      }
+    },
+    "lastVerified": "2026-08-25",
+    "createdAt": "2026-08-25",
+    "updatedAt": "2026-08-25"
+  }
+]

@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getArticleHref } from '../../data/utils/article-routing';
+
+const articles = (await getCollection('articles', ({ data }) => data.type === 'knowledge')).sort(
+  (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime(),
+);
+
+const title = '机场代理知识库｜基础概念与选购指南｜机场E家';
+const description = '机场代理相关的基础概念、协议与客户端解释、选购判断维度，帮助从完全不了解到能看懂机场推荐榜单。';
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={[{ name: '知识库', href: '/knowledge/' }]} />
+
+  <h1>机场代理知识库</h1>
+  <p>这里整理机场代理相关的基础概念、协议与客户端说明、选购判断维度，帮助你从完全不了解到能看懂机场推荐榜单。</p>
+
+  {
+    articles.length > 0 ? (
+      <div class="provider-grid">
+        {articles.map((article) => (
+          <a href={getArticleHref(article)} class="provider-card">
+            <span class="provider-card__name">{article.data.title}</span>
+            <p class="provider-card__meta">{article.data.description}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p>知识库正在建设中，暂无已发布的文章。</p>
+    )
+  }
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/airports/">查看机场导航</a></li>
+    <li><a href="/rankings/">查看机场推荐</a></li>
+  </ul>
+</BaseLayout>

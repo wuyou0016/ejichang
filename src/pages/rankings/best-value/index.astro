@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import RankingEntries from '../../../components/RankingEntries.astro';
+import { getRankingPageData } from '../../../data/utils/ranking-entries';
+import { resolveCanonicalUrl } from '../../../config/seo';
+
+const { ranking, entries } = await getRankingPageData('best-value');
+
+const title = '性价比机场｜机场代理推荐｜机场E家';
+const description = '从价格、流量、设备数等实际使用条件出发，说明机场E家如何评估机场代理服务商的性价比，而不是单纯比价格。';
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: resolveCanonicalUrl('/rankings/best-value/'),
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs
+    items={[
+      { name: '机场推荐', href: '/rankings/' },
+      { name: '性价比机场', href: '/rankings/best-value/' },
+    ]}
+  />
+
+  <h1>性价比机场｜机场代理推荐</h1>
+  <p>关注预算和流量单价的用户，可以参考这个榜单的整理思路。</p>
+
+  <h2>"性价比"如何评估</h2>
+  <p>
+    性价比不等于价格最低。本榜单关注在实际使用条件下，服务成本与可用资源之间的平衡，而不是单纯按照价格排序。具体会参考官方公开的价格、流量额度等信息；如果有本站测试数据，也会一并参考实际使用表现。
+  </p>
+  <p>
+    需要说明的是：价格、流量这些信息目前在数据结构里是自由文本（比如"12元/月"这种写法），暂时无法被程序自动解析成可以互相比较的数字，所以本榜单<strong>目前没有客观计算出的基础评分</strong>——排名基于以上信息整理得出，页面会公开具体理由，不会伪装成算法算出来的客观结果。
+  </p>
+
+  <h2>当前收录情况</h2>
+  <RankingEntries entries={entries} />
+  {ranking && <p>方法论版本：{ranking.data.scoringVersion}，数据快照时间：{ranking.data.snapshotAt.toISOString().slice(0, 10)}。</p>}
+
+  <h2>常见问题</h2>
+
+  <p><strong>性价比机场榜是怎么算出来的？</strong></p>
+  <p>目前价格、流量等信息还是自由文本格式，无法自动计算出客观评分，因此榜单排名基于官方信息、第三方资料整理得出，页面会公开具体理由。</p>
+
+  <p><strong>以后这个榜单会有客观评分吗？</strong></p>
+  <p>如果未来价格、流量等字段支持结构化数值，具备了可以自动计算的条件，会更新方法论说明；在此之前，本站不会用文字近似值硬凑出一个"评分"。</p>
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/rankings/">查看机场推荐</a></li>
+    <li><a href="/airports/">查看机场导航</a></li>
+    <li><a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
+  </ul>
+
+  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
+</BaseLayout>

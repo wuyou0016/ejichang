@@ -1,0 +1,228 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SourceBadge from '../../components/SourceBadge.astro';
+import { isDemoEntry } from '../../data/utils/demo-filter';
+import { isProviderPublishable } from '../../data/utils/provider-publish-gate';
+import { resolveCanonicalUrl } from '../../config/seo';
+
+export async function getStaticPaths() {
+  const [providers, tests] = await Promise.all([
+    getCollection('providers', ({ id }) => !isDemoEntry(id)),
+    getCollection('tests', ({ id }) => !isDemoEntry(id)),
+  ]);
+
+  // 发布门槛在这里、也只在这里判断：不达标的 Provider 根本不会有 params，
+  // 不会生成 URL，不依赖后续用 noindex 补救。
+  const publishable = providers.filter((provider) => isProviderPublishable(provider, tests));
+
+  return publishable.map((provider) => ({
+    params: { slug: provider.data.slug },
+    props: { provider },
+  }));
+}
+
+interface Props {
+  provider: CollectionEntry<'providers'>;
+}
+
+const { provider } = Astro.props;
+
+const [tests, rankings] = await Promise.all([
+  getCollection('tests', ({ id }) => !isDemoEntry(id)),
+  getCollection('rankings', ({ id }) => !isDemoEntry(id)),
+]);
+
+const providerTests = tests.filter((test) => test.data.providerId.id === provider.id);
+const providerRankings = rankings.filter((ranking) =>
+  ranking.data.entries.some((entry) => entry.providerId.id === provider.id),
+);
+
+const statusLabel: Record<CollectionEntry<'providers'>['data']['status'], string> = {
+  active: '正常运营',
+  inactive: '暂停服务',
+  discontinued: '已停止服务',
+  watch: '观察中',
+};
+
+const hasEditorial =
+  provider.data.editorial.summary.trim().length > 0 &&
+  (provider.data.editorial.pros.length > 0 || provider.data.editorial.cons.length > 0);
+
+function formatDate(value: string | Date): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  return date.toISOString().slice(0, 10);
+}
+
+const uniqueThirdPartySources = new Set(
+  (provider.data.thirdPartyNotes ?? []).map((note) => note.source.split('（')[0].trim()),
+);
+const descriptionExtras: string[] = [];
+if (providerTests.length > 0) descriptionExtras.push('本站实测数据');
+if (uniqueThirdPartySources.size > 0) {
+  descriptionExtras.push(`来自 ${uniqueThirdPartySources.size} 个第三方来源的公开资料`);
+}
+if (hasEditorial) descriptionExtras.push('编辑分析');
+const description = `${provider.data.name}的机场代理服务商信息${
+  descriptionExtras.length > 0 ? `，整理了${descriptionExtras.join('、')}` : ''
+}。`;
+
+const title = `${provider.data.name}怎么样？机场代理评测与使用指南｜机场E家`;
+const h1 = `${provider.data.name}｜机场代理服务商评测`;
+
+const canonicalUrl = resolveCanonicalUrl(`/airports/${provider.data.slug}/`);
+const lastUpdated = new Date(provider.data.updatedAt);
+
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: canonicalUrl,
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs
+    items={[
+      { name: '机场导航', href: '/airports/' },
+      { name: provider.data.name, href: `/airports/${provider.data.slug}/` },
+    ]}
+  />
+
+  <h1>{h1}</h1>
+
+  <dl class="quick-facts">
+    <div>
+      <dt>状态</dt>
+      <dd class={`status-dot status-dot--${provider.data.status}`}>{statusLabel[provider.data.status]}</dd>
+    </div>
+    <div>
+      <dt>信息最后核实时间</dt>
+      <dd>{formatDate(provider.data.lastVerified)}</dd>
+    </div>
+  </dl>
+
+  <h2>官方公开信息</h2>
+  <div class="info-panel info-panel--vendor">
+    <SourceBadge type="vendor" />
+    <p>{provider.data.vendor.description}</p>
+    <ul>
+      <li>
+        官网：
+        <a href={provider.data.vendor.officialWebsite} rel="nofollow noopener" target="_blank" class="outbound-link">
+          访问 {provider.data.name} 官网<span class="outbound-link__icon" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  {providerTests.length > 0 && (
+    <>
+      <h2>本站测试</h2>
+      <div class="info-panel info-panel--in-house">
+        <SourceBadge type="in-house" />
+        {providerTests.map((test) => (
+          <div class="test-record">
+            <p>测试日期：{formatDate(test.data.date)}</p>
+            <p>测试方法：{test.data.methodology}</p>
+            <dl>
+              <dt>测试地区</dt>
+              <dd>{test.data.environment.location}</dd>
+              <dt>测试网络</dt>
+              <dd>{test.data.environment.network}</dd>
+              <dt>测试客户端</dt>
+              <dd>{test.data.environment.client}</dd>
+              <dt>测试协议</dt>
+              <dd>{test.data.environment.protocol}</dd>
+            </dl>
+            {test.data.results?.streaming && test.data.results.streaming.length > 0 && (
+              <ul>
+                {test.data.results.streaming.map((item) => (
+                  <li>
+                    {item.platform}：{item.unlocked ? '已解锁' : '未解锁'}
+                    {item.notes && `（${item.notes}）`}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {test.data.notes && <p>备注：{test.data.notes}</p>}
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+
+  {hasEditorial && (
+    <>
+      <h2>编辑结论</h2>
+      <div class="info-panel info-panel--editorial">
+        <SourceBadge type="editorial" />
+        <p>{provider.data.editorial.summary}</p>
+        {provider.data.editorial.pros.length > 0 && (
+          <>
+            <h3>优点</h3>
+            <ul>
+              {provider.data.editorial.pros.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </>
+        )}
+        {provider.data.editorial.cons.length > 0 && (
+          <>
+            <h3>需要注意的地方</h3>
+            <ul>
+              {provider.data.editorial.cons.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </>
+  )}
+
+  {provider.data.thirdPartyNotes && provider.data.thirdPartyNotes.length > 0 && (
+    <>
+      <h2>第三方资料</h2>
+      <div class="info-panel info-panel--third-party">
+        <SourceBadge type="third-party" />
+        <ul class="note-list">
+          {provider.data.thirdPartyNotes.map((note) => (
+            <li>
+              <p class="note-list__source">{note.source} · {formatDate(note.date)}</p>
+              <p class="note-list__claim">{note.claim}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  )}
+
+  {providerRankings.length > 0 && (
+    <>
+      <h2>相关榜单</h2>
+      <ul class="quick-links">
+        {providerRankings.map((ranking) => (
+          <li>
+            <a href={ranking.id === 'overall' ? '/rankings/' : `/rankings/${ranking.id}/`}>{ranking.data.title}</a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/airports/">查看更多机场导航</a></li>
+    <li><a href="/rankings/">查看机场推荐</a></li>
+    <li><a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
+  </ul>
+
+  <p>本页最后更新于 {formatDate(lastUpdated)}。信息按来源分为官方公开信息、第三方资料与编辑观点，分别标注。</p>
+
+  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
+</BaseLayout>

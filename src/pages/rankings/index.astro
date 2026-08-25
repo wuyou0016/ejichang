@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import RankingEntries from '../../components/RankingEntries.astro';
+import { getRankingPageData } from '../../data/utils/ranking-entries';
+import { resolveCanonicalUrl } from '../../config/seo';
+
+const subRankings = [
+  { slug: 'best-value', title: '性价比机场', href: '/rankings/best-value/' },
+  { slug: 'most-stable', title: '最稳定的机场', href: '/rankings/most-stable/' },
+  { slug: 'for-beginners', title: '适合新手的机场', href: '/rankings/for-beginners/' },
+];
+
+const { ranking: overallRanking, entries: overallEntries } = await getRankingPageData('overall');
+
+const rankingStates = await Promise.all(
+  subRankings.map(async (item) => {
+    const { entries } = await getRankingPageData(item.slug);
+    return { ...item, hasEntries: entries.length > 0 };
+  }),
+);
+
+const title = '机场推荐排行榜｜2026综合榜与选购说明｜机场E家';
+const description = '查看机场E家的综合推荐榜，了解2026机场推荐排序思路、数据来源与更新方式。从稳定性、性价比与新手友好等维度，对照各机场代理的定位再决定是否试用。';
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: resolveCanonicalUrl('/rankings/'),
+};
+
+const overallItemListJsonLd =
+  overallEntries.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: '机场推荐综合榜',
+        itemListElement: overallEntries.map((entry) => ({
+          '@type': 'ListItem',
+          position: entry.finalRank,
+          name: entry.providerName,
+          url: resolveCanonicalUrl(`/airports/${entry.providerSlug}/`),
+        })),
+      }
+    : null;
+
+const faqAnswer1 =
+  overallEntries.length > 0
+    ? `当前是「${overallEntries[0]!.providerName}」（第 ${overallEntries[0]!.finalRank} 名），具体理由见上方榜单条目。该结果会随本站掌握的资料更新而调整，不是固定不变的。`
+    : '当前暂无综合推荐条目。';
+const faqPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '机场E家目前综合推荐第一是谁？',
+      acceptedAnswer: { '@type': 'Answer', text: faqAnswer1 },
+    },
+    {
+      '@type': 'Question',
+      name: '综合推荐是本站实测出来的客观结果吗？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '不是。综合推荐榜会参考官方公开信息与第三方资料进行整理，目前暂无法给出可比较的客观量化评分，排序结果会随资料更新而调整。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '机场导航和机场推荐有什么区别？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '机场导航是收录服务商的完整目录，帮你查具体某一家的信息；机场推荐是本站按不同维度整理出的候选建议，回答"现在优先看哪家"。',
+      },
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={[{ name: '机场推荐', href: '/rankings/' }]} />
+
+  <h1>机场推荐｜机场E家综合推荐榜</h1>
+  <p>
+    这里是机场E家的机场推荐排行榜入口：先看当前的综合推荐结果，再按你自己更看重的维度（性价比、稳定性、新手友好）查看对应的专项榜单。和"机场导航"（服务商目录）不同，这里回答的是"现在应该优先看哪家"。
+  </p>
+
+  <h2>当前综合推荐</h2>
+  <p>综合推荐榜结合官方公开信息与第三方资料，整理出当前的机场代理推荐顺序，并会随资料更新持续调整。</p>
+  <RankingEntries entries={overallEntries} />
+  {
+    overallRanking && (
+      <p>方法论版本：{overallRanking.data.scoringVersion}，数据快照时间：{overallRanking.data.snapshotAt.toISOString().slice(0, 10)}。</p>
+    )
+  }
+
+  <h2>常见问题</h2>
+
+  <p><strong>机场E家目前综合推荐第一是谁？</strong></p>
+  <p>
+    {overallEntries.length > 0
+      ? `当前是「${overallEntries[0]!.providerName}」（第 ${overallEntries[0]!.finalRank} 名），具体理由见上方榜单条目。该结果会随本站掌握的资料更新而调整，不是固定不变的。`
+      : '当前暂无综合推荐条目。'}
+  </p>
+
+  <p><strong>综合推荐是本站实测出来的客观结果吗？</strong></p>
+  <p>不是。综合推荐榜会参考官方公开信息与第三方资料进行整理，目前暂无法给出可比较的客观量化评分，排序结果会随资料更新而调整。</p>
+
+  <p><strong>机场导航和机场推荐有什么区别？</strong></p>
+  <p><a href="/airports/">机场导航</a>是收录服务商的完整目录，帮你查具体某一家的信息；机场推荐（本页）是本站按不同维度整理出的候选建议，回答"现在优先看哪家"。</p>
+
+  <h2>综合推荐和专项榜有什么区别</h2>
+  <p>
+    有人最在意价格和流量是否划算，有人更看重长期使用是否稳定，也有人刚接触机场代理、更需要简单易配置的服务商。因此除了综合推荐榜，我们还按不同维度分别整理了三个专项榜，而不是只给一个笼统的排序。
+  </p>
+  <ul class="quick-links">
+    {
+      subRankings.map((item) => (
+        <li>
+          <a href={item.href}>{item.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>推荐数据来源与发布门槛</h2>
+  <p>
+    不管是综合推荐榜还是专项榜，候选服务商都必须先满足我们的发布门槛——具备真实的官方公开信息，并至少有本站测试数据或实质性的编辑结论，仅有官方宣传信息的服务商不会出现在任何榜单中。榜单结果基于当前可用数据；当数据不足时，我们不会强行给出排名——你会看到诚实的"暂无符合条件的服务商"状态，而不是凑数的名单。
+  </p>
+
+  <h2>排名是怎么算出来的</h2>
+  <p>
+    每个榜单条目会综合官方公开信息与第三方资料等因素得出排序。有测试数据支撑时，条目会标注为"客观计算"，并展示具体的评分依据；暂时没有足够数据支撑客观计算时，本站会基于现有信息整理出排序结果，不会把这类结果包装成客观测试得出的分数。综合推荐榜目前暂无法计算出客观量化评分，排序基于本站掌握的公开资料整理，会随资料更新持续调整。
+  </p>
+
+  <h2>专项榜当前状态</h2>
+  <ul class="quick-links">
+    {
+      rankingStates.map((item) => (
+        <li>
+          <a href={item.href}>{item.title}</a>：{item.hasEntries ? '已有符合条件的服务商' : '当前暂无符合发布条件的服务商'}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>不知道从哪开始？</h2>
+  <ul class="quick-links">
+    <li>还不知道机场代理是什么？先看<a href="/knowledge/what-is-airport-proxy/">机场代理是什么</a></li>
+    <li>知道概念了，但不知道怎么选？看<a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
+    <li>已经决定了某个服务商？直接前往<a href="/airports/">机场导航</a>查看详情</li>
+  </ul>
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/airports/">查看机场导航</a></li>
+    <li><a href="/knowledge/">查看知识库</a></li>
+  </ul>
+
+  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
+  {overallItemListJsonLd && <script type="application/ld+json" set:html={JSON.stringify(overallItemListJsonLd)} />}
+  <script type="application/ld+json" set:html={JSON.stringify(faqPageJsonLd)} />
+</BaseLayout>

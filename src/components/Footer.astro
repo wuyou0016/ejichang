@@ -1,0 +1,44 @@
+---
+import { siteConfig } from '../config/site';
+
+// 只链接已真实存在的页面。机场评测等板块尚未建成时，
+// 不在此处提前放入链接，避免死链；友情链接同理，不虚构合作关系。
+const coreLinks = [
+  { label: '首页', href: '/' },
+  { label: '机场导航', href: '/airports/' },
+  { label: '机场推荐', href: '/rankings/' },
+  { label: '知识库', href: '/knowledge/' },
+  { label: '使用教程', href: '/tutorials/' },
+  { label: '常见问题', href: '/troubleshooting/' },
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <h2>{siteConfig.brandName}</h2>
+      <p>{siteConfig.description}</p>
+    </div>
+    <div>
+      <h2>主要导航</h2>
+      <ul>
+        {
+          coreLinks.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__note">
+    <h2>网站说明</h2>
+    <p>本站提供机场信息整理、使用知识、测试数据与编辑推荐。不同来源的数据会明确标注来源类型（官方公开信息、第三方资料、本站实测、编辑观点），不会混在一起呈现。内容板块正在建设中，会持续更新。</p>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>&copy; {currentYear} {siteConfig.brandName}（{siteConfig.brandNameEn}）</p>
+  </div>
+</footer>

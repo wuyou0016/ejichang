@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+import { getRankingPageData } from '../data/utils/ranking-entries';
+import { resolveCanonicalUrl } from '../config/seo';
+
+const { entries: overallEntries } = await getRankingPageData('overall');
+const topPicks = overallEntries.slice(0, 3);
+
+const topPicksItemListJsonLd =
+  topPicks.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: '机场推荐综合榜 TOP 3',
+        itemListElement: topPicks.map((entry) => ({
+          '@type': 'ListItem',
+          position: entry.finalRank,
+          name: entry.providerName,
+          url: resolveCanonicalUrl(`/airports/${entry.providerSlug}/`),
+        })),
+      }
+    : null;
+
+// 尚未建成的板块，先不做超链接——避免死链，等内容真正上线后再改成 <a>。
+const roadmap = [{ title: '机场评测', desc: '速度、稳定性、线路等维度的独立测评内容' }];
+---
+
+<BaseLayout
+  title={siteConfig.defaultTitle}
+  description={siteConfig.defaultDescription}
+  keywords={['机场代理', '机场导航', '机场推荐', '性价比机场', '机场E家']}
+>
+  <section class="hero">
+    <span class="hero__eyebrow">机场代理导航与推荐</span>
+    <h1>快、稳、能解锁流媒体的机场怎么选</h1>
+    <p class="hero__lead">
+      机场E家整理机场代理的官方信息、第三方资料与站长实测，把延迟、解锁情况、套餐价格这些真实数据摆出来，帮你少踩坑、快速挑到适合自己的机场代理。
+    </p>
+  </section>
+
+  {
+    topPicks.length > 0 && (
+      <section aria-labelledby="top-picks">
+        <div class="section-head">
+          <h2 id="top-picks">当前综合推荐 TOP {topPicks.length}</h2>
+          <a href="/rankings/">查看完整机场推荐 →</a>
+        </div>
+        <ol class="ranking-list ranking-list--compact">
+          {topPicks.map((entry) => (
+            <li class={`ranking-list__item${entry.finalRank === 1 ? ' ranking-list__item--top' : ''}`}>
+              <div class="ranking-list__header">
+                <span class="ranking-list__rank">
+                  <span class="sr-only">第</span>
+                  {entry.finalRank}
+                  <span class="sr-only">名</span>
+                </span>
+                <a href={`/airports/${entry.providerSlug}/`}>{entry.providerName}</a>
+              </div>
+              <p>{entry.reason}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  <section aria-labelledby="who-we-help">
+    <h2 id="who-we-help">机场E家能帮你解决什么</h2>
+    <ul class="feature-list">
+      <li>刚接触机场代理，不知道从哪里开始了解</li>
+      <li>已经在用，但想找性价比更高或更稳定的选择</li>
+      <li>想弄清楚协议、节点、线路这些概念到底是什么意思</li>
+      <li>遇到连接问题，想知道怎么排查</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="entry-points">
+    <h2 id="entry-points">现在可以看什么</h2>
+    <ul class="entry-links">
+      <li>
+        <a href="/airports/">机场导航</a>
+        <p>浏览已收录的机场代理服务商目录，逐一查看官方信息与第三方资料。</p>
+      </li>
+      <li>
+        <a href="/rankings/">机场推荐</a>
+        <p>按综合、性价比、稳定性、新手友好等维度整理的候选建议。</p>
+      </li>
+      <li>
+        <a href="/knowledge/">知识库</a>
+        <p>机场代理是什么、和 VPN 有什么区别、挑选时该看哪些维度。</p>
+      </li>
+      <li>
+        <a href="/tutorials/">使用教程</a>
+        <p>Clash、小火箭等客户端怎么装、怎么导入订阅、怎么连接。</p>
+      </li>
+      <li>
+        <a href="/troubleshooting/">常见问题</a>
+        <p>连不上、网页打不开、订阅导入失败这类问题的排查思路。</p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="roadmap">
+    <h2 id="roadmap">内容板块（建设中）</h2>
+    <p>以下板块正在建设，尚未正式上线，会陆续更新：</p>
+    <ul class="roadmap-grid">
+      {
+        roadmap.map((item) => (
+          <li class="roadmap-card">
+            <strong>{item.title}</strong>
+            {item.desc}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {topPicksItemListJsonLd && <script type="application/ld+json" set:html={JSON.stringify(topPicksItemListJsonLd)} />}
+</BaseLayout>

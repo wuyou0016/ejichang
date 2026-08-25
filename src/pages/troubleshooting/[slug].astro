@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { resolveCanonicalUrl } from '../../config/seo';
+
+export async function getStaticPaths() {
+  const issues = await getCollection('articles', ({ data }) => data.type === 'troubleshooting');
+  return issues.map((issue) => ({
+    params: { slug: issue.id },
+    props: { issue },
+  }));
+}
+
+const { issue } = Astro.props;
+const { Content } = await render(issue);
+
+function formatDate(value: string | Date): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  return date.toISOString().slice(0, 10);
+}
+
+const canonicalUrl = resolveCanonicalUrl(`/troubleshooting/${issue.id}/`);
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: issue.data.title,
+  description: issue.data.description,
+  url: canonicalUrl,
+  datePublished: new Date(issue.data.publishedAt).toISOString(),
+  dateModified: new Date(issue.data.updatedAt).toISOString(),
+};
+---
+
+<BaseLayout
+  title={`${issue.data.title}｜机场E家`}
+  description={issue.data.description}
+  ogType="article"
+  publishedTime={new Date(issue.data.publishedAt).toISOString()}
+  modifiedTime={new Date(issue.data.updatedAt).toISOString()}
+>
+  <Breadcrumbs
+    items={[
+      { name: '常见问题', href: '/troubleshooting/' },
+      { name: issue.data.title, href: `/troubleshooting/${issue.id}/` },
+    ]}
+  />
+
+  <article class="article-content">
+    <h1>{issue.data.title}</h1>
+    <p class="article-meta">
+      {issue.data.category}
+      {' · '}更新于 {formatDate(issue.data.updatedAt)}
+    </p>
+    <Content />
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+</BaseLayout>

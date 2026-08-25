@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import RankingEntries from '../../../components/RankingEntries.astro';
+import { getRankingPageData } from '../../../data/utils/ranking-entries';
+import { resolveCanonicalUrl } from '../../../config/seo';
+
+const { ranking, entries } = await getRankingPageData('most-stable');
+
+const title = '2026最稳定的机场推荐｜稳定性榜单与评选方法｜机场E家';
+const description = '说明机场E家如何基于本站测试数据评估机场代理服务商的稳定性，以及稳定性榜单当前的收录情况。';
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: resolveCanonicalUrl('/rankings/most-stable/'),
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs
+    items={[
+      { name: '机场推荐', href: '/rankings/' },
+      { name: '最稳定的机场', href: '/rankings/most-stable/' },
+    ]}
+  />
+
+  <h1>2026最稳定的机场推荐</h1>
+  <p>更看重长期稳定使用的用户，可以参考这个稳定性榜单的整理思路。</p>
+
+  <h2>稳定性如何判断</h2>
+  <p>
+    稳定性优先看的是本站测试记录中的丢包率（packetLossPercent）——这是原始测试观测值，不是加工过的评分。如果暂时没有丢包率数据，会退回参考"稳定性评分"这一已加工指标，页面会注明使用的是哪一种依据。
+  </p>
+  <p>
+    一个服务商要出现在这个榜单里，至少需要满足：<strong>至少 2 条本站真实测试记录</strong>，且这些记录的<strong>时间跨度不少于 7 天</strong>。单次测试、或者时间跨度太短的测试，不足以证明"稳定"这种需要跨时间观察才能确认的属性，因此不会被纳入计算。如果一个服务商完全没有相关测试数据，就不会出现在这个稳定性榜单中——我们不会仅凭官方信息或宣传语给出稳定性结论。
+  </p>
+
+  <h2>当前收录情况</h2>
+  <RankingEntries entries={entries} />
+  {ranking && <p>方法论版本：{ranking.data.scoringVersion}，数据快照时间：{ranking.data.snapshotAt.toISOString().slice(0, 10)}。</p>}
+
+  <h2>常见问题</h2>
+
+  <p><strong>为什么现在这个榜单是空的？</strong></p>
+  <p>因为机场E家目前还没有任何一个已收录的服务商积累到至少 2 条、时间跨度 7 天以上的本站真实测试记录。我们不会为了让页面看起来有内容就放宽这个门槛，也不会用官方宣传或第三方测速数据代替本站实测。</p>
+
+  <p><strong>什么时候会有排名结果？</strong></p>
+  <p>等某个服务商积累够符合条件的本站测试数据后，会自动出现在这个榜单里，这是一个持续更新的过程。</p>
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/rankings/">查看机场推荐</a></li>
+    <li><a href="/airports/">查看机场导航</a></li>
+    <li><a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
+  </ul>
+
+  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
+</BaseLayout>

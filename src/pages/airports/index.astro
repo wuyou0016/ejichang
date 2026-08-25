@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getPublishableProviders } from '../../data/utils/provider-publish-gate';
+
+// 只列出通过发布门槛（真正有独立页面）的 Provider，避免链接到未生成的页面。
+const providers = await getPublishableProviders();
+
+const statusLabel: Record<string, string> = {
+  active: '正常运营',
+  inactive: '暂停服务',
+  discontinued: '已停止服务',
+  watch: '观察中',
+};
+
+function providerCard(provider: (typeof providers)[number]) {
+  const noteCount = provider.data.thirdPartyNotes?.length ?? 0;
+  return {
+    name: provider.data.name,
+    href: `/airports/${provider.data.slug}/`,
+    status: provider.data.status,
+    statusText: statusLabel[provider.data.status] ?? provider.data.status,
+    meta: noteCount > 0 ? `官方公开信息 + ${noteCount} 条第三方资料 + 编辑分析` : '官方公开信息 + 编辑分析',
+  };
+}
+const providerCards = providers.map(providerCard);
+---
+
+<BaseLayout
+  title="机场导航｜机场代理服务商目录｜机场E家"
+  description="浏览机场E家收录的机场代理服务商，了解基础信息、第三方资料与编辑分析的呈现方式。"
+>
+  <Breadcrumbs items={[{ name: '机场导航', href: '/airports/' }]} />
+
+  <h1>机场导航｜机场代理服务商目录</h1>
+  <p>
+    本站所说的"机场"，指机场代理服务商，不是现实机场、航班、航站楼或机场交通。这里是我们收录的机场代理服务商目录，帮助你快速找到并了解具体的服务商。
+  </p>
+
+  <h2>每个服务商页面会包含什么</h2>
+  <p>
+    每个服务商页面会用明确的标签区分几类信息：<strong>官方公开信息</strong>（服务商自己发布的套餐、节点介绍，或访问受阻的实际情况）、<strong>第三方资料</strong>（其他公开评测站点记录的价格、测速与解锁描述，逐条标注来源与日期）、<strong>编辑分析</strong>（机场E家基于以上信息形成的判断）。三类信息各自标注来源与时间，不会混在一起呈现，也不会把编辑的主观判断包装成客观测试结果。
+  </p>
+
+  <h2>怎么使用机场导航</h2>
+  <p>
+    如果你还不确定要选哪个服务商，可以先浏览这里收录的服务商列表，点开具体页面逐一查看官方信息、第三方资料和编辑结论。如果你已经明确自己更看重哪个维度，也可以跳过逐个浏览，直接前往<a href="/rankings/">机场推荐</a>，按维度查看已经整理好的候选服务商。还不清楚"机场"到底是什么、和 VPN 有什么区别，可以先看<a href="/knowledge/what-is-airport-proxy/">机场代理是什么</a>；不确定该看哪些维度，可以看<a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a>。
+  </p>
+
+  <h2>当前收录的服务商</h2>
+  {
+    providerCards.length > 0 ? (
+      <div class="provider-grid">
+        {providerCards.map((card) => (
+          <a href={card.href} class="provider-card">
+            <div class="provider-card__top">
+              <span class="provider-card__name">{card.name}</span>
+              <span class={`status-dot status-dot--${card.status}`}>{card.statusText}</span>
+            </div>
+            <p class="provider-card__meta">{card.meta}</p>
+            <span class="provider-card__cta">查看详情 →</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p>当前暂无已发布的机场代理服务商页面。</p>
+    )
+  }
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/rankings/">查看机场推荐</a></li>
+  </ul>
+</BaseLayout>

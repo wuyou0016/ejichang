@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { resolveCanonicalUrl } from '../../config/seo';
+
+export async function getStaticPaths() {
+  const tutorials = await getCollection('articles', ({ data }) => data.type === 'tutorial');
+  return tutorials.map((tutorial) => ({
+    params: { slug: tutorial.id },
+    props: { tutorial },
+  }));
+}
+
+const { tutorial } = Astro.props;
+const { Content } = await render(tutorial);
+
+function formatDate(value: string | Date): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  return date.toISOString().slice(0, 10);
+}
+
+const canonicalUrl = resolveCanonicalUrl(`/tutorials/${tutorial.id}/`);
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: tutorial.data.title,
+  description: tutorial.data.description,
+  url: canonicalUrl,
+  datePublished: new Date(tutorial.data.publishedAt).toISOString(),
+  dateModified: new Date(tutorial.data.updatedAt).toISOString(),
+};
+---
+
+<BaseLayout
+  title={`${tutorial.data.title}｜机场E家教程`}
+  description={tutorial.data.description}
+  ogType="article"
+  publishedTime={new Date(tutorial.data.publishedAt).toISOString()}
+  modifiedTime={new Date(tutorial.data.updatedAt).toISOString()}
+>
+  <Breadcrumbs
+    items={[
+      { name: '使用教程', href: '/tutorials/' },
+      { name: tutorial.data.title, href: `/tutorials/${tutorial.id}/` },
+    ]}
+  />
+
+  <article class="article-content">
+    <h1>{tutorial.data.title}</h1>
+    <p class="article-meta">
+      {tutorial.data.category}
+      {' · '}更新于 {formatDate(tutorial.data.updatedAt)}
+    </p>
+    <Content />
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+</BaseLayout>

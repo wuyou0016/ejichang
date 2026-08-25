@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getArticleHref } from '../../data/utils/article-routing';
+
+const issues = (await getCollection('articles', ({ data }) => data.type === 'troubleshooting')).sort(
+  (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime(),
+);
+
+const title = '机场常见问题排查｜机场E家';
+const description = '机场代理连不上、网页打不开、订阅导入失败等常见问题的排查思路整理。';
+---
+
+<BaseLayout title={title} description={description}>
+  <Breadcrumbs items={[{ name: '常见问题', href: '/troubleshooting/' }]} />
+
+  <h1>机场常见问题排查</h1>
+  <p>
+    这里整理机场代理使用过程中常见问题的排查思路。如果你还在配置阶段还没连上过，先看<a href="/tutorials/">客户端使用教程</a>；如果之前能用、现在突然不行了，或者连上了但网页打不开，这里的内容更适合你。
+  </p>
+
+  {
+    issues.length > 0 ? (
+      <div class="provider-grid">
+        {issues.map((issue) => (
+          <a href={getArticleHref(issue)} class="provider-card">
+            <span class="provider-card__name">{issue.data.title}</span>
+            <p class="provider-card__meta">{issue.data.description}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p>排查内容正在建设中，暂无已发布的文章。</p>
+    )
+  }
+
+  <p>你可能还想看：</p>
+  <ul class="quick-links">
+    <li><a href="/tutorials/">查看使用教程</a></li>
+    <li><a href="/knowledge/">查看知识库</a></li>
+    <li><a href="/airports/">查看机场导航</a></li>
+  </ul>
+</BaseLayout>

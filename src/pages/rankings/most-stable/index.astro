@@ -7,8 +7,8 @@ import { resolveCanonicalUrl } from '../../../config/seo';
 
 const { ranking, entries } = await getRankingPageData('most-stable');
 
-const title = '2026最稳定的机场推荐｜稳定性榜单与评选方法｜机场E家';
-const description = '说明机场E家如何基于本站测试数据评估机场代理服务商的稳定性，以及稳定性榜单当前的收录情况。';
+const title = '2026最稳定的机场是哪家｜晚高峰实测数据｜机场E家';
+const description = '机场E家用本站真实测试记录（优先看丢包率）判断哪家机场晚高峰不掉线、长期稳定，数据不足时如实显示观察中，不凑排名。';
 const webPageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -26,16 +26,25 @@ const webPageJsonLd = {
     ]}
   />
 
-  <h1>2026最稳定的机场推荐</h1>
-  <p>更看重长期稳定使用的用户，可以参考这个稳定性榜单的整理思路。</p>
+  <h1>2026最稳定的机场是哪家</h1>
+  <p>晚高峰经常掉线、卡顿的用户，这个榜单是为你整理的——只看真实测试数据，不看宣传语。</p>
 
   <h2>稳定性如何判断</h2>
   <p>
-    稳定性优先看的是本站测试记录中的丢包率（packetLossPercent）——这是原始测试观测值，不是加工过的评分。如果暂时没有丢包率数据，会退回参考"稳定性评分"这一已加工指标，页面会注明使用的是哪一种依据。
+    稳定性优先看的是本站测试记录中的丢包率（packetLossPercent）——这是原始测试观测值，不是加工过的评分。一个服务商要出现在这个榜单里，至少需要满足：<strong>至少 2 条本站真实测试记录</strong>，且这些记录的<strong>时间跨度不少于 7 天</strong>。单次测试不足以证明"稳定"这种需要跨时间观察才能确认的属性。
   </p>
   <p>
-    一个服务商要出现在这个榜单里，至少需要满足：<strong>至少 2 条本站真实测试记录</strong>，且这些记录的<strong>时间跨度不少于 7 天</strong>。单次测试、或者时间跨度太短的测试，不足以证明"稳定"这种需要跨时间观察才能确认的属性，因此不会被纳入计算。如果一个服务商完全没有相关测试数据，就不会出现在这个稳定性榜单中——我们不会仅凭官方信息或宣传语给出稳定性结论。
+    机场E家和 rocketjichang.com 是同一位站长运营的两个站，测试数据体系是共享的——目前的真实测试记录主要积累在 rocketjichang.com（本站长期维护的数据追踪站），如果你想看逐条历史记录和观察进度，可以直接去 rocketjichang.com 的<a href="https://rocketjichang.com/rankings/most-stable/" rel="noopener" target="_blank">最稳定的机场</a>页面查看。机场E家这个页面的定位不同：不是重复维护一套数据中心，而是帮你判断"在没有足够长期数据支撑之前，我自己该怎么验证"。
   </p>
+
+  <h2>数据不足时，你自己可以怎么验证</h2>
+  <p>不是所有服务商都会很快积累到 2 条、7 天跨度的记录，等待的同时你可以自己做这几件事：</p>
+  <ul class="quick-links">
+    <li>下单前先用月付/小额套餐观察 1-2 周晚高峰（20:00-23:00）的实际使用体验，而不是直接年付</li>
+    <li>连续几天在晚高峰各测一次延迟和是否掉线，记录下来自己比对，方法可以参考<a href="/knowledge/airport-speed-test-explained/">机场测速怎么测、怎么看</a></li>
+    <li>查看服务商官方入口是否能直接核实信息（见<a href="/rankings/">机场推荐</a>里的"本站资料核验情况"），入口越不透明，越需要自己多验证几天</li>
+    <li>关注运营时长和历史风险信号，参考<a href="/knowledge/airport-scam-risk/">机场"跑路"风险怎么识别</a>——新开的服务商即使短期测试数据好看，长期稳定性也还需要时间验证</li>
+  </ul>
 
   <h2>当前收录情况</h2>
   <RankingEntries entries={entries} />
@@ -54,6 +63,7 @@ const webPageJsonLd = {
     <li><a href="/rankings/">查看机场推荐</a></li>
     <li><a href="/airports/">查看机场导航</a></li>
     <li><a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
+    <li><a href="/knowledge/airport-speed-test-explained/">机场测速怎么测、怎么看</a></li>
   </ul>
 
   <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />

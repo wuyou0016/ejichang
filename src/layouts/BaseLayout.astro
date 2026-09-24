@@ -2,6 +2,7 @@
 import SEOHead from '../components/SEOHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 import { siteConfig } from '../config/site';
 import { resolveCanonicalUrl, type RobotsDirective } from '../config/seo';
 import '../styles/global.css';
@@ -15,9 +16,12 @@ interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   keywords?: string[];
+  // 可选，仅用于给个别页面（目前只有首页）加一个 body class 挂纯视觉背景，
+  // 不传就是原来的样子，不影响其它页面。
+  bodyClass?: string;
 }
 
-const { title, description, robots, ogType, ogImage, publishedTime, modifiedTime, keywords } = Astro.props;
+const { title, description, robots, ogType, ogImage, publishedTime, modifiedTime, keywords, bodyClass } = Astro.props;
 const pathname = Astro.url.pathname;
 const homepageUrl = resolveCanonicalUrl('/');
 
@@ -66,8 +70,9 @@ const organizationJsonLd = {
     />
     <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <Analytics />
   </head>
-  <body>
+  <body class={bodyClass}>
     <Header />
     <main class="container">
       <slot />

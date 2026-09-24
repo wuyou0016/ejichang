@@ -1,9 +1,27 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import RankingEntries from '../../components/RankingEntries.astro';
 import { getRankingPageData } from '../../data/utils/ranking-entries';
 import { resolveCanonicalUrl } from '../../config/seo';
+import { getTestedProviderStats } from '../../data/utils/tested-providers';
+import { getPublishableProviders } from '../../data/utils/provider-publish-gate';
+import featured from '../../data/utils/wuyou-lianjie-featured.json';
+
+// 资料核验情况：官方入口目前能不能直接核实套餐/节点信息，逐个服务商记录，
+// 这是"买之前先看这个"的真实依据，不是猜测——直接来自 providers.json 里
+// 已经记录的官方入口访问结果。
+const verificationBarrier: Record<string, string> = {
+  'wuyou-lianjie': '验证码校验页，需人工输入图形验证码',
+  'weifeng-network': '需先注册账户（邮箱+密码）才能查看',
+  firefly: '需先注册账户（邮箱+密码）才能查看',
+  'lingmao-network': '过渡页 + 注册账户才能查看',
+  shanyue: '验证码校验页，需人工输入图形验证码',
+  'kuajie-cloud': '过渡页 + 注册账户才能查看',
+  'feimao-cloud': '自动化工具访问被拒绝/加载失败',
+};
+const publishableProviders = await getPublishableProviders();
 
 const subRankings = [
   { slug: 'best-value', title: '性价比机场', href: '/rankings/best-value/' },
@@ -13,6 +31,23 @@ const subRankings = [
 
 const { ranking: overallRanking, entries: overallEntries } = await getRankingPageData('overall');
 
+// #1 用 Featured 卡片单独展示，#2 及以后仍然走原来统一的 RankingEntries 列表——
+// 排序、reason、rankOverride 全部来自 rankings.json，这里只是拆分渲染方式，
+// 不改变任何排名数据本身。featuredEntry 只在真的是 wuyou-lianjie 时才启用
+// Featured 展示，避免以后排名变化时误把别的服务商套上这份专属文案。
+const featuredEntry =
+  overallEntries.length > 0 && overallEntries[0]!.providerSlug === 'wuyou-lianjie' ? overallEntries[0]! : null;
+const restEntries = featuredEntry ? overallEntries.slice(1) : overallEntries;
+
+// "唯一有真实实测"这句话不写死——每次构建都从 tests.json 实际统计，避免以后
+// 补了别的服务商的实测数据后文案变成假话。/airports/ 用的是同一份统计逻辑。
+const { testedCount, totalCount } = await getTestedProviderStats();
+const isSoleTested = testedCount === 1;
+const coreAdvantagePoints = isSoleTested
+  ? [`机场E家收录的 ${totalCount} 个服务商里，目前唯一有本站真实实测记录的一个`]
+  : [`机场E家收录的 ${totalCount} 个服务商里，目前 ${testedCount} 个有本站真实实测记录的服务商之一`];
+const whyFirstSections = [{ category: '核心优势', points: coreAdvantagePoints }, ...featured.whyFirstSections];
+
 const rankingStates = await Promise.all(
   subRankings.map(async (item) => {
     const { entries } = await getRankingPageData(item.slug);
@@ -20,8 +55,8 @@ const rankingStates = await Promise.all(
   }),
 );
 
-const title = '机场推荐排行榜｜2026综合榜与选购说明｜机场E家';
-const description = '查看机场E家的综合推荐榜，了解2026机场推荐排序思路、数据来源与更新方式。从稳定性、性价比与新手友好等维度，对照各机场代理的定位再决定是否试用。';
+const title = '机场推荐｜看速度、稳定性和解锁效果选机场｜机场E家';
+const description = '机场E家的机场推荐入口：按速度、稳定性和流媒体解锁效果整理候选服务商，附带综合推荐、性价比、稳定性、新手友好四个角度的专项榜单，帮你决定先看哪家。';
 const webPageJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -81,14 +116,90 @@ const faqPageJsonLd = {
 <BaseLayout title={title} description={description}>
   <Breadcrumbs items={[{ name: '机场推荐', href: '/rankings/' }]} />
 
-  <h1>机场推荐｜机场E家综合推荐榜</h1>
+  <h1>机场推荐——按速度、稳定和解锁效果整理</h1>
   <p>
-    这里是机场E家的机场推荐排行榜入口：先看当前的综合推荐结果，再按你自己更看重的维度（性价比、稳定性、新手友好）查看对应的专项榜单。和"机场导航"（服务商目录）不同，这里回答的是"现在应该优先看哪家"。
+    挑机场最终看的是三件事：跑得快不快、晚高峰稳不稳、流媒体和常用服务解锁效果好不好。这个入口先给你当前的综合推荐结果，再按你更在意的维度（性价比、稳定性、新手友好）分别查看专项榜单。和"机场导航"（服务商完整目录）不同，这里直接回答"现在优先看哪家"。
   </p>
 
   <h2>当前综合推荐</h2>
   <p>综合推荐榜结合官方公开信息与第三方资料，整理出当前的机场代理推荐顺序，并会随资料更新持续调整。</p>
-  <RankingEntries entries={overallEntries} />
+
+  {
+    featuredEntry && (
+      <div class="standalone-featured">
+        <div class="champion">
+          <div class="champion__head">
+            <span class="champion__rank" aria-hidden="true">1</span>
+            <div class="champion__heading">
+              <span class="champion__tag">{featured.tag}</span>
+              <a href={`/airports/${featuredEntry.providerSlug}/`} class="champion__name">
+                <span class="sr-only">综合推荐第 1 名：</span>
+                {featuredEntry.providerName}
+              </a>
+            </div>
+          </div>
+
+          <p class="champion__intro">{featured.rankingIntro}</p>
+
+          <div class="champion__stats">
+            {featured.stats.map((stat) => (
+              <div class="champion__stat">
+                <span class="champion__stat-value">{stat.value}</span>
+                <span class="champion__stat-label">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div class="champion__section">
+            <h3 class="champion__section-title">流媒体解锁记录（单次实测，2026-07-18）</h3>
+            <div class="champion__unlock">
+              {featured.unlockStats.map((item) => (
+                <div class="champion__unlock-item">
+                  <span class="champion__unlock-platform">{item.platform} 解锁记录</span>
+                  <div class="champion__unlock-value">
+                    <span class="champion__unlock-fraction">{item.value}</span>
+                    <span class="champion__unlock-percent">{item.percent}</span>
+                  </div>
+                  <p class="champion__unlock-note">{item.note}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="champion__section">
+            <h3 class="champion__section-title">{featured.whyFirstTitle}</h3>
+            <div class="champion__groups">
+              {whyFirstSections.map((section) => (
+                <div class="champion__group">
+                  <span class="champion__group-category">{section.category}</span>
+                  <ul>
+                    {section.points.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p class="champion__conclusion">{featured.conclusion}</p>
+
+          <a
+            href={`/airports/${featuredEntry.providerSlug}/`}
+            class="champion__cta"
+            data-analytics-event="recommendation_card_click"
+            data-provider={featuredEntry.providerSlug}
+            data-provider-name={featuredEntry.providerName}
+            data-cta-label="机场推荐旗舰卡片"
+          >
+            查看无忧链接完整详情 →
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  <RankingEntries entries={restEntries} />
   {
     overallRanking && (
       <p>方法论版本：{overallRanking.data.scoringVersion}，数据快照时间：{overallRanking.data.snapshotAt.toISOString().slice(0, 10)}。</p>
@@ -110,6 +221,49 @@ const faqPageJsonLd = {
   <p><strong>机场导航和机场推荐有什么区别？</strong></p>
   <p><a href="/airports/">机场导航</a>是收录服务商的完整目录，帮你查具体某一家的信息；机场推荐（本页）是本站按不同维度整理出的候选建议，回答"现在优先看哪家"。</p>
 
+  <h2>先判断你属于哪种情况</h2>
+  <p>推荐结果因人而异，不存在"绝对第一"——先看你自己更接近下面哪一种：</p>
+  <ul class="quick-links">
+    <li><strong>预算有限，先看每块钱能换多少流量</strong>——查看<a href="/rankings/best-value/">性价比机场</a></li>
+    <li><strong>需要长期稳定使用（比如工作），怕晚高峰掉线</strong>——查看<a href="/rankings/most-stable/">最稳定的机场</a></li>
+    <li><strong>第一次用机场代理，不想折腾复杂配置</strong>——查看<a href="/rankings/for-beginners/">适合新手的机场</a></li>
+    <li><strong>已经心动某一家，但担心资料不实、怕踩坑</strong>——直接看下面"买之前必须检查的几件事"</li>
+  </ul>
+
+  <h2>买之前必须检查的几件事</h2>
+  <p>
+    机场代理这个行业信息不对称问题突出——很多服务商官方入口本身就打不开或者需要先注册才能看到真实套餐，第三方资料也经常互相矛盾。价格好不好看只是第一层，下单前至少还要确认这几件事：
+  </p>
+  <ul class="quick-links">
+    <li>官方入口能不能直接核实套餐信息，还是要先注册/验证码才能看到——见下方"本站资料核验情况"</li>
+    <li>支付方式是否正规、是否支持有争议时的追溯，参考<a href="/knowledge/airport-payment-methods/">机场怎么付款？常见支付方式和注意事项</a></li>
+    <li>这家运营时间长不长、有没有跑路风险信号，参考<a href="/knowledge/airport-scam-risk/">机场"跑路"风险怎么识别</a></li>
+    <li>是不是非要买机场不可，还是免费方案/自建节点更适合你，参考<a href="/knowledge/free-vs-paid-airport/">免费机场和付费机场有什么区别</a>、<a href="/knowledge/airport-vs-self-hosted/">机场代理和自建节点有什么区别</a></li>
+  </ul>
+
+  <h2>本站资料核验情况</h2>
+  <p>下表是本站尝试访问各服务商官方入口的真实结果——能不能直接看到套餐信息，还是需要先跨过注册墙或验证码。这不代表服务商不靠谱，但意味着你自己下单前也大概率会遇到同样的门槛，需要有心理准备。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>服务商</th>
+          <th>官方入口访问结果</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          publishableProviders.map((provider) => (
+            <tr>
+              <td><a href={`/airports/${provider.data.slug}/`}>{provider.data.name}</a></td>
+              <td>{verificationBarrier[provider.id] ?? '未记录'}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
   <h2>综合推荐和专项榜有什么区别</h2>
   <p>
     有人最在意价格和流量是否划算，有人更看重长期使用是否稳定，也有人刚接触机场代理、更需要简单易配置的服务商。因此除了综合推荐榜，我们还按不同维度分别整理了三个专项榜，而不是只给一个笼统的排序。
@@ -118,28 +272,7 @@ const faqPageJsonLd = {
     {
       subRankings.map((item) => (
         <li>
-          <a href={item.href}>{item.title}</a>
-        </li>
-      ))
-    }
-  </ul>
-
-  <h2>推荐数据来源与发布门槛</h2>
-  <p>
-    不管是综合推荐榜还是专项榜，候选服务商都必须先满足我们的发布门槛——具备真实的官方公开信息，并至少有本站测试数据或实质性的编辑结论，仅有官方宣传信息的服务商不会出现在任何榜单中。榜单结果基于当前可用数据；当数据不足时，我们不会强行给出排名——你会看到诚实的"暂无符合条件的服务商"状态，而不是凑数的名单。
-  </p>
-
-  <h2>排名是怎么算出来的</h2>
-  <p>
-    每个榜单条目会综合官方公开信息与第三方资料等因素得出排序。有测试数据支撑时，条目会标注为"客观计算"，并展示具体的评分依据；暂时没有足够数据支撑客观计算时，本站会基于现有信息整理出排序结果，不会把这类结果包装成客观测试得出的分数。综合推荐榜目前暂无法计算出客观量化评分，排序基于本站掌握的公开资料整理，会随资料更新持续调整。
-  </p>
-
-  <h2>专项榜当前状态</h2>
-  <ul class="quick-links">
-    {
-      rankingStates.map((item) => (
-        <li>
-          <a href={item.href}>{item.title}</a>：{item.hasEntries ? '已有符合条件的服务商' : '当前暂无符合发布条件的服务商'}
+          <a href={item.href}>{item.title}</a>：{rankingStates.find((s) => s.slug === item.slug)?.hasEntries ? '已有符合条件的服务商' : '当前暂无符合发布条件的服务商'}
         </li>
       ))
     }
@@ -149,6 +282,7 @@ const faqPageJsonLd = {
   <ul class="quick-links">
     <li>还不知道机场代理是什么？先看<a href="/knowledge/what-is-airport-proxy/">机场代理是什么</a></li>
     <li>知道概念了，但不知道怎么选？看<a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
+    <li>下单前想再确认一下风险？看<a href="/knowledge/airport-scam-risk/">机场"跑路"风险怎么识别</a></li>
     <li>已经决定了某个服务商？直接前往<a href="/airports/">机场导航</a>查看详情</li>
   </ul>
 

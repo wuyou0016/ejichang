@@ -35,7 +35,7 @@ Clash 是 Windows 和 macOS 上最常用的机场客户端之一，两个系统�
 
 ## 常见问题
 
-**为什么导入订阅后节点列表是空的？** 常见原因是订阅链接已过期、套餐已到期，或者链接本身复制不完整，建议回到机场服务商的后台重新复制一次完整链接。
+**为什么导入订阅后节点列表是空的？** 常见原因是订阅链接已过期、套餐已到期，或者链接本身复制不完整，建议回到机场服务商的后台重新复制一次完整链接。如果不是空列表、而是弹出具体的报错信息（比如解析失败），见[Clash 导入订阅报错、解析失败怎么办](/troubleshooting/clash-import-failed/)。
 
 **为什么开了代理还是打不开某些网站？** 可能是节点本身当前不可用，也可能是该网站对代理 IP 有额外限制，更完整的排查顺序见[机场连不上、网页打不开怎么排查](/troubleshooting/connection-failed-troubleshooting/)。
 
@@ -43,6 +43,7 @@ Clash 是 Windows 和 macOS 上最常用的机场客户端之一，两个系统�
 
 - [苹果小火箭（Shadowrocket）配置教程](/tutorials/ios-shadowrocket-setup/)
 - [Android 机场客户端配置教程](/tutorials/android-setup/)
+- [Clash 导入订阅报错、解析失败怎么办](/troubleshooting/clash-import-failed/)
 - [机场协议对比：SS / V2Ray / SSR / Trojan / Hysteria2](/knowledge/protocols-compared/)
 - [机场导航｜机场代理服务商目录](/airports/)
 - [适合新手的机场推荐](/rankings/for-beginners/)

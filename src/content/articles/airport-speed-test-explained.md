@@ -46,3 +46,4 @@ relatedTopics:
 - [机场代理怎么选](/knowledge/how-to-choose-an-airport-proxy/)
 - [2026最稳定的机场推荐](/rankings/most-stable/)
 - [机场"流媒体解锁"是什么意思](/knowledge/streaming-unlock-explained/)
+- [机场节点慢怎么办？现在就能做的几件事](/troubleshooting/airport-node-slow/)

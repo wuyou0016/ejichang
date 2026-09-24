@@ -50,3 +50,4 @@ relatedTopics:
 - [机场代理怎么选](/knowledge/how-to-choose-an-airport-proxy/)
 - [机场导航｜机场代理服务商目录](/airports/)
 - [机场客户端使用教程](/tutorials/)
+- [机场代理和自建节点有什么区别](/knowledge/airport-vs-self-hosted/)

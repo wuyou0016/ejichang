@@ -5,7 +5,7 @@ description: 说明机场订阅链接是什么、常见格式、导入前要确�
 category: 客户端教程
 difficulty: beginner
 publishedAt: 2026-08-25
-updatedAt: 2026-08-25
+updatedAt: 2026-09-24
 relatedTopics:
   - what-is-airport-proxy
   - clash-desktop-setup
@@ -39,9 +39,12 @@ relatedTopics:
 
 **导入成功但连不上？** 说明订阅本身没问题，更完整的排查顺序见[机场连不上、网页打不开怎么排查](/troubleshooting/connection-failed-troubleshooting/)。
 
+**Clash 导入时弹出具体报错，而不是节点列表为空？** 见[Clash 导入订阅报错、解析失败怎么办](/troubleshooting/clash-import-failed/)。
+
 ## 你可能还想看
 
 - [机场代理是什么](/knowledge/what-is-airport-proxy/)
 - [机场导航｜机场代理服务商目录](/airports/)
 - [机场常见问题排查](/troubleshooting/)
 - [适合新手的机场推荐](/rankings/for-beginners/)
+- [机场怎么用？新手从购买到连上的完整流程](/tutorials/airport-getting-started/)

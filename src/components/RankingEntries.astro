@@ -20,7 +20,15 @@ const { entries } = Astro.props;
               {entry.finalRank}
               <span class="sr-only">名</span>
             </span>
-            <a href={`/airports/${entry.providerSlug}/`}>{entry.providerName}</a>
+            <a
+              href={`/airports/${entry.providerSlug}/`}
+              data-analytics-event="recommendation_card_click"
+              data-provider={entry.providerSlug}
+              data-provider-name={entry.providerName}
+              data-cta-label={`排名第${entry.finalRank}名`}
+            >
+              {entry.providerName}
+            </a>
           </div>
           <p>{entry.reason}</p>
           {entry.baseScore !== null && (

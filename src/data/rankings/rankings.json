@@ -21,6 +21,42 @@
         "reason": "无忧链接目前暂无可比较的客观性价比评分，机场E家结合第三方公开资料的完整程度，将其纳入本榜单第一位。",
         "rankOverride": 1,
         "rankOverrideReason": "性价比机场榜第 1 位。"
+      },
+      {
+        "providerId": "lingmao-network",
+        "reason": "两个独立第三方来源对其年付起步价（约 7.1 元/月、45GB）基本吻合，是本榜单目前起步价最低且有多来源印证的服务商；但协议描述存在冲突（宣传称新 SS 协议，测速截图显示 Vless），购买前建议先向客服确认实际协议。",
+        "rankOverride": 2,
+        "rankOverrideReason": "性价比机场榜第 2 位——多来源印证的最低起步价。"
+      },
+      {
+        "providerId": "firefly",
+        "reason": "两个独立第三方来源对其年付起步价（约 8 元/月、60GB）描述一致，价格可信度在本榜单中相对较高。",
+        "rankOverride": 3,
+        "rankOverrideReason": "性价比机场榜第 3 位——多来源印证的价格。"
+      },
+      {
+        "providerId": "shanyue",
+        "reason": "第三方资料显示其年付起步价约 8 元/月、60GB，与 Firefly 接近，两个来源之间价格描述基本一致。",
+        "rankOverride": 4,
+        "rankOverrideReason": "性价比机场榜第 4 位——价格与 Firefly 接近。"
+      },
+      {
+        "providerId": "weifeng-network",
+        "reason": "第三方资料显示其起步价约 11 元/月、100GB，单价高于前几家，定位偏入门级专线，适合对价格不那么敏感、更看重专线宣传的用户。",
+        "rankOverride": 5,
+        "rankOverrideReason": "性价比机场榜第 5 位——单价高于同批其他服务商。"
+      },
+      {
+        "providerId": "kuajie-cloud",
+        "reason": "第三方资料对其套餐价格与流量档位的描述差异较大（同一来源内部表述都不一致），机场E家未能判断哪个更接近官方实际价格，性价比暂难评估，购买前务必以官方页面为准。",
+        "rankOverride": 6,
+        "rankOverrideReason": "性价比机场榜第 6 位——价格资料内部冲突，可信度低于其他条目。"
+      },
+      {
+        "providerId": "feimao-cloud",
+        "reason": "起步价约 7 元/月、50GB，价格本身在本榜单中偏低，但第三方监测数据显示其实际表现（下载速率约 0.69 Mbps、请求失败率 100%）与宣传严重不符，本站未能判断这是长期问题还是临时故障——单纯比价格会掩盖这个风险，因此排在末位，购买前请务必先看服务商详情页的完整说明。",
+        "rankOverride": 7,
+        "rankOverrideReason": "性价比机场榜第 7 位——价格低但存在未解释的实测异常，风险优先于价格。"
       }
     ]
   },

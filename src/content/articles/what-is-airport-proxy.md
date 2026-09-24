@@ -5,7 +5,7 @@ description: 说明"机场"这个说法在科学上网语境里具体指什么�
 category: 基础知识
 difficulty: beginner
 publishedAt: 2026-08-25
-updatedAt: 2026-08-25
+updatedAt: 2026-09-24
 relatedTopics:
   - how-to-choose-an-airport-proxy
   - protocols-compared
@@ -34,9 +34,9 @@ relatedTopics:
 | 节点/协议 | 多协议、多节点，可在客户端里自由切换 | 通常只用自家协议，客户端内切换服务器 |
 | 计费方式 | 常见按流量（GB）计费，也有不限流量套餐 | 多为按时长（月/年）计费，流量不限 |
 | 透明度 | 差异很大，从公开测速数据到"验证码/注册墙挡住看不到套餐"的都有 | 通常官网直接展示套餐与节点列表 |
-| 稳定性风险 | 存在服务商跑路、节点无预警下线的风险，需要自行甄别 | 头部厂商跑路风险相对更低，但价格通常更高 |
+| 稳定性风险 | 存在服务商跑路、节点无预警下线的[风险](/knowledge/airport-scam-risk/)，需要自行甄别 | 头部厂商跑路风险相对更低，但价格通常更高 |
 
-两者本质上都是代理服务，差异更多在于运营模式、透明度和生态习惯，而不是技术上的根本不同。如果你看到"VPN机场"这种说法，指的就是机场代理这类服务，不是传统意义上的商业 VPN 品牌。
+两者本质上都是代理服务，差异更多在于运营模式、透明度和生态习惯，而不是技术上的根本不同。如果你看到"VPN机场"这种说法，指的就是机场代理这类服务，不是传统意义上的商业 VPN 品牌。除了购买机场套餐，也有人选择自己搭建代理服务器，两种方式的区别见[机场代理和自建节点有什么区别](/knowledge/airport-vs-self-hosted/)；市面上也有不少免费机场，和付费机场的差异见[免费机场和付费机场有什么区别](/knowledge/free-vs-paid-airport/)。
 
 ## 选机场代理需要注意什么
 
@@ -49,4 +49,10 @@ relatedTopics:
 - [机场导航｜机场代理服务商目录](/airports/)
 - [机场推荐排行榜](/rankings/)
 - [机场代理怎么选](/knowledge/how-to-choose-an-airport-proxy/)
+- [梯子是什么？梯子、VPN、机场、代理的关系](/knowledge/ladder-vpn-airport-relationship/)
+- [VPN 和机场怎么选？按使用场景判断](/knowledge/vpn-or-airport/)
+- [机场怎么用？新手从购买到连上的完整流程](/tutorials/airport-getting-started/)
 - [机场协议对比：SS / V2Ray / SSR / Trojan / Hysteria2](/knowledge/protocols-compared/)
+- [机场代理和自建节点有什么区别](/knowledge/airport-vs-self-hosted/)
+- [免费机场和付费机场有什么区别](/knowledge/free-vs-paid-airport/)
+- [机场"跑路"风险怎么识别](/knowledge/airport-scam-risk/)

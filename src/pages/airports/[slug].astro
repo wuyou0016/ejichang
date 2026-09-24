@@ -59,18 +59,33 @@ function formatDate(value: string | Date): string {
 const uniqueThirdPartySources = new Set(
   (provider.data.thirdPartyNotes ?? []).map((note) => note.source.split('（')[0].trim()),
 );
-const descriptionExtras: string[] = [];
-if (providerTests.length > 0) descriptionExtras.push('本站实测数据');
-if (uniqueThirdPartySources.size > 0) {
-  descriptionExtras.push(`来自 ${uniqueThirdPartySources.size} 个第三方来源的公开资料`);
-}
-if (hasEditorial) descriptionExtras.push('编辑分析');
-const description = `${provider.data.name}的机场代理服务商信息${
-  descriptionExtras.length > 0 ? `，整理了${descriptionExtras.join('、')}` : ''
-}。`;
 
-const title = `${provider.data.name}怎么样？机场代理评测与使用指南｜机场E家`;
-const h1 = `${provider.data.name}｜机场代理服务商评测`;
+// Title / description / H1 / 开篇摘要刻意采用"资料核实、多方来源比对"的角度，
+// 而不是"评测与使用指南"。这不是为了和姊妹站 RocketJichang.com 的同款页面
+// 制造表面差异，而是因为机场E家对这批服务商的 editorial.summary 本身就是
+// 围绕"官方入口能不能核实 + 第三方来源之间是否互相印证"写的（见
+// src/data/providers/providers.json），用这个角度组织标题和摘要，是在如实
+// 反映本站这批内容真实的写作重点，而不是编出一个新说法。
+const descriptionParts: string[] = [`${provider.data.name}的官方公开信息`];
+if (uniqueThirdPartySources.size > 0) {
+  descriptionParts.push(`来自 ${uniqueThirdPartySources.size} 个独立第三方来源的资料`);
+}
+if (providerTests.length > 0) descriptionParts.push('本站实测数据');
+const description = `机场E家核实了${descriptionParts.join('、')}，按来源分别标注，帮助你在下单前自行判断${provider.data.name}的真实情况。`;
+
+const title = `${provider.data.name}资料能核实吗？整理官方与第三方来源｜机场E家`;
+const h1 = `${provider.data.name}｜官方与第三方资料核实`;
+
+// 开篇摘要段：只用页面已经在算的这几个真实布尔值/数字拼句子，不额外引入
+// 任何新事实，帮读者不用往下翻就知道这页有没有本站实测、有几个第三方来源。
+const introParts: string[] = [];
+if (providerTests.length > 0) introParts.push('本站实测数据');
+if (uniqueThirdPartySources.size > 0) introParts.push(`${uniqueThirdPartySources.size} 个独立第三方来源的资料`);
+if (hasEditorial) introParts.push('机场E家的核实说明');
+const introSummary =
+  introParts.length > 0
+    ? `这篇页面整理并核对了${provider.data.name}目前公开可查的资料，包括${introParts.join('、')}，并按来源分别标注，帮助你在下单前自行判断。`
+    : `这篇页面整理了${provider.data.name}目前公开可查的官方信息，暂无本站实测或第三方资料可供核对，机场E家会持续跟进补充。`;
 
 const canonicalUrl = resolveCanonicalUrl(`/airports/${provider.data.slug}/`);
 const lastUpdated = new Date(provider.data.updatedAt);
@@ -93,6 +108,7 @@ const webPageJsonLd = {
   />
 
   <h1>{h1}</h1>
+  <p>{introSummary}</p>
 
   <dl class="quick-facts">
     <div>
@@ -161,6 +177,30 @@ const webPageJsonLd = {
       <div class="info-panel info-panel--editorial">
         <SourceBadge type="editorial" />
         <p>{provider.data.editorial.summary}</p>
+        {(provider.data.editorial.suitableFor.length > 0 || provider.data.editorial.notSuitableFor.length > 0) && (
+          <div class="suitability">
+            {provider.data.editorial.suitableFor.length > 0 && (
+              <div class="suitability__group suitability__group--for">
+                <h3>适合什么人</h3>
+                <ul>
+                  {provider.data.editorial.suitableFor.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {provider.data.editorial.notSuitableFor.length > 0 && (
+              <div class="suitability__group suitability__group--against">
+                <h3>不适合什么人</h3>
+                <ul>
+                  {provider.data.editorial.notSuitableFor.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
         {provider.data.editorial.pros.length > 0 && (
           <>
             <h3>优点</h3>
@@ -215,6 +255,13 @@ const webPageJsonLd = {
     </>
   )}
 
+  <h2>下单前建议再检查这几件事</h2>
+  <ul class="quick-links">
+    <li>这家的支付方式是否正规、出问题能不能追溯，参考<a href="/knowledge/airport-payment-methods/">机场怎么付款？常见支付方式和注意事项</a></li>
+    <li>有没有跑路风险信号（比如超低价终身套餐、公告长期停更），参考<a href="/knowledge/airport-scam-risk/">机场"跑路"风险怎么识别</a></li>
+    <li>是不是非买不可，还是免费方案或自建节点更适合你，参考<a href="/knowledge/free-vs-paid-airport/">免费机场和付费机场有什么区别</a>、<a href="/knowledge/airport-vs-self-hosted/">机场代理和自建节点有什么区别</a></li>
+  </ul>
+
   <p>你可能还想看：</p>
   <ul class="quick-links">
     <li><a href="/airports/">查看更多机场导航</a></li>
@@ -226,3 +273,30 @@ const webPageJsonLd = {
 
   <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
 </BaseLayout>
+
+<style>
+  .suitability {
+    display: grid;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .suitability {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .suitability__group {
+    border-radius: 0.5rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-border, #2a3352);
+  }
+  .suitability__group--for {
+    border-left: 3px solid var(--color-accent, #10b981);
+  }
+  .suitability__group--against {
+    border-left: 3px solid var(--color-accent-2, #7c5cff);
+  }
+  .suitability__group h3 {
+    margin-top: 0;
+  }
+</style>

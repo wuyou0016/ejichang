@@ -25,6 +25,7 @@
   --line-height-base: 1.75;
 
   --container-width: 72rem;
+  --home-container-width: 90rem;
   --content-width: 42rem;
   --page-gutter: 2rem;
 
@@ -101,6 +102,17 @@ body,
   transition: background-color var(--theme-transition), border-color var(--theme-transition), color var(--theme-transition);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -140,6 +152,16 @@ svg {
 @media (min-width: 64rem) {
   .container {
     padding-inline: var(--page-gutter);
+  }
+}
+
+/* 首页版心：只在 body.home 下把 main.container 的上限从 72rem 提到 90rem，
+   选择器只比 .container 更具体，不改 .container 本身的定义——其余 26 个
+   页面用的还是原来的 72rem，一个字节都没变。 */
+@media (min-width: 64rem) {
+  body.home main.container {
+    max-width: var(--home-container-width);
+    padding-inline: 2rem;
   }
 }
 
@@ -268,27 +290,787 @@ button:focus-visible {
 
 /* -------------------- Homepage -------------------- */
 
+/* 首页专属的环境光背景：大范围渐变光晕 + 极淡点阵，仅通过 body.home 生效，
+   不影响其它任何页面（BaseLayout 的 bodyClass 只有首页会传）。用 color-mix 取
+   --color-primary/--color-accent 当前主题下的真实颜色，浅色/深色模式都自动适配，
+   不需要另外为深色模式写一套光晕颜色。光晕尺寸刻意用较大的 rem 值 + 多团叠加，
+   保证在 1440-1920px 宽视口下也能覆盖到中间区域，不会只在两个角落各留一小块。 */
+body.home {
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(circle at center, color-mix(in srgb, var(--color-text) 3%, transparent) 1px, transparent 1px),
+    radial-gradient(70rem 44rem at 8% -12%, color-mix(in srgb, var(--color-primary) 12%, transparent), transparent 68%),
+    radial-gradient(60rem 40rem at 100% -6%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 66%),
+    radial-gradient(66rem 48rem at 50% 18%, color-mix(in srgb, var(--color-primary) 5%, transparent), transparent 72%),
+    radial-gradient(46rem 38rem at 92% 48%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 68%);
+  background-size: 20px 20px, auto, auto, auto, auto;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+}
+
 .hero {
-  padding-block: var(--space-16) var(--space-12);
-  max-width: var(--content-width);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--space-12) var(--space-8);
+  max-width: none;
+}
+
+@media (min-width: 64rem) {
+  .hero {
+    padding-block: 5rem 3.5rem;
+  }
+}
+
+/* Hero 的内容居中在一个比外层版心窄的区域里——外层 .hero 仍然铺满新的宽版心
+   （环境光/网格背景需要满宽才好看），但标签/标题/副标题这些实际阅读内容
+   收在约 1100px 内居中，避免整段视觉重心偏向左边。 */
+.hero__inner {
+  max-width: 68.75rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.hero__glow {
+  position: absolute;
+  z-index: -1;
+  border-radius: 999px;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.hero__glow--a {
+  width: 18rem;
+  height: 18rem;
+  top: -7rem;
+  left: -5rem;
+  background: color-mix(in srgb, var(--color-primary) 32%, transparent);
+}
+
+.hero__glow--b {
+  width: 14rem;
+  height: 14rem;
+  top: -5rem;
+  right: -3rem;
+  background: color-mix(in srgb, var(--color-accent) 26%, transparent);
+}
+
+.hero__glow--c {
+  width: 12rem;
+  height: 12rem;
+  bottom: -8rem;
+  left: 28%;
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
 }
 
 .hero__eyebrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.45em 1.1em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 28%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-primary);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.hero__eyebrow::before {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--gradient-primary);
+}
+
+@media (min-width: 64rem) {
+  .hero__eyebrow {
+    font-size: 0.9375rem;
+    padding: 0.5em 1.25em;
+    margin-bottom: var(--space-6);
+  }
 }
 
 .hero h1 {
   margin-top: 0;
-  font-size: 2.25rem;
+  font-size: 2rem;
+}
+
+@media (min-width: 64rem) {
+  .hero h1 {
+    font-size: 3.75rem;
+    text-wrap: balance;
+  }
+}
+
+.hero__title-accent {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .hero__lead {
-  font-size: 1.125rem;
+  max-width: 38rem;
+  margin-inline: auto;
+  font-size: 1.0625rem;
+  line-height: 1.8;
   color: var(--color-muted);
+}
+
+@media (min-width: 64rem) {
+  .hero__lead {
+    max-width: 56.25rem;
+    font-size: 1.1875rem;
+    margin-top: var(--space-4);
+  }
+}
+
+/* -------------------- Top picks（首页 TOP3，三档视觉层级） -------------------- */
+
+.top-picks {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-4) 0 var(--space-12);
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .top-picks {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .top-pick--first {
+    grid-column: 1 / -1;
+  }
+}
+
+.top-pick {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  transition: transform var(--theme-transition), box-shadow var(--theme-transition), border-color var(--theme-transition);
+}
+
+.top-pick:hover,
+.top-pick:focus-within {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 0 2px color-mix(in srgb, var(--color-primary) 12%, transparent);
+  border-color: var(--color-primary);
+}
+
+.top-pick__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.top-pick__rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.top-pick__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.top-pick__name {
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.top-pick__name:hover {
+  color: var(--color-primary);
+}
+
+.top-pick__tag {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--gradient-primary);
+  color: #fff;
+}
+
+.top-pick__desc {
+  color: var(--color-muted);
+  flex-grow: 1;
+}
+
+.top-pick__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: gap var(--theme-transition);
+}
+
+.top-pick__cta:hover {
+  gap: 0.45em;
+}
+
+.top-pick__highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.top-pick__highlights li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.3em 0.75em;
+  border-radius: 999px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 9%, var(--color-surface)), var(--color-surface));
+  border: 1px solid var(--color-border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: border-color var(--theme-transition), transform var(--theme-transition);
+}
+
+.top-pick__highlights li:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.top-pick__highlights li::before {
+  content: '✓';
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 第一名：更大、更满、更有分量——顶部渐变高光条 + 柔光边框，视觉上明确领先 */
+.top-pick--first {
+  position: relative;
+  padding: var(--space-6);
+  padding-top: calc(var(--space-6) + 3px);
+  gap: var(--space-4);
+  border: 1px solid var(--color-primary);
+  background: linear-gradient(160deg, var(--color-primary-soft) 0%, var(--color-surface) 60%);
+  box-shadow: var(--shadow-md), 0 0 0 3px var(--color-primary-soft);
+  overflow: hidden;
+}
+
+.top-pick--first::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--gradient-primary);
+}
+
+.top-pick--first:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 0 4px var(--color-primary-soft);
+}
+
+.top-pick--first .top-pick__rank {
+  width: 3.25rem;
+  height: 3.25rem;
+  font-size: 1.5rem;
+  background: var(--gradient-primary);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.top-pick--first .top-pick__name {
+  font-size: 1.625rem;
+}
+
+.top-pick--first .top-pick__tag {
+  font-size: 0.75rem;
+  padding: 0.3em 0.85em;
+  box-shadow: var(--shadow-sm);
+}
+
+.top-pick--first .top-pick__desc {
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.top-pick--first .top-pick__cta {
+  margin-top: var(--space-2);
+  padding: 0.65em 1.2em;
+  border-radius: var(--radius);
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 0.9375rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.top-pick--first .top-pick__cta:hover {
+  filter: brightness(1.06);
+}
+
+/* Featured 卡片单独出现在 /airports/ 和 /rankings/ 页面时（不在首页
+   .top-picks 网格里）需要自己的上下间距，不能借用网格的 gap。 */
+.standalone-featured {
+  margin: var(--space-4) 0 var(--space-8);
+}
+
+/* ==================== Champion Card ====================
+   /airports/ 和 /rankings/ 两个页面专用的旗舰级 Featured 卡片。视觉语言和首页
+   .top-pick--first 一脉相承（渐变顶带、柔光边框、玻璃背景），但用独立的类名，
+   不共用同一份规则——两边内容都比首页版更丰富（指标带、分区、分类分组），
+   以后任何一处调整都不会互相牵连，也不会影响首页。 */
+
+.champion {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-primary);
+  background: linear-gradient(165deg, var(--color-primary-soft) 0%, var(--color-surface) 55%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md), 0 0 0 4px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+@media (min-width: 48rem) {
+  .champion {
+    padding: var(--space-8);
+  }
+}
+
+.champion::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: var(--gradient-primary);
+}
+
+.champion__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.champion__rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 999px;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--shadow-sm);
+}
+
+.champion__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.champion__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.9em;
+  border-radius: 999px;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-sm);
+}
+
+.champion__tag::before {
+  content: '';
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.champion__name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+@media (min-width: 48rem) {
+  .champion__name {
+    font-size: 2.125rem;
+  }
+}
+
+.champion__name:hover {
+  color: var(--color-primary);
+}
+
+.champion__intro {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+/* 指标带 */
+.champion__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 40rem) {
+  .champion__stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.champion__stat {
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.champion__stat-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.champion__stat-label {
+  display: block;
+  margin-top: 0.25em;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* 流媒体解锁指标（/rankings/ 用） */
+.champion__unlock {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 40rem) {
+  .champion__unlock {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.champion__unlock-item {
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  border: 1px solid var(--color-border);
+}
+
+.champion__unlock-platform {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.champion__unlock-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  margin-top: 0.2em;
+}
+
+.champion__unlock-fraction {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.champion__unlock-percent {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.champion__unlock-note {
+  margin: 0.4em 0 0;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+/* 分区（用顶部分隔线区分卡片里的不同模块） */
+.champion__section {
+  padding-top: var(--space-5);
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 16%, var(--color-border));
+}
+
+.champion__section-title {
+  margin: 0 0 var(--space-3);
+  font-size: 1.125rem;
+  color: var(--color-text);
+}
+
+/* 要点网格（/airports/ "为什么值得优先考虑？" 用） */
+.champion__points {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (min-width: 48rem) {
+  .champion__points {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.champion__point {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  border: 1px solid var(--color-border);
+}
+
+.champion__point-label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.35em;
+}
+
+.champion__point-detail {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+/* 分类分组（/rankings/ "为什么排在第一？" 用：核心优势/实测表现/流媒体解锁/第三方资料） */
+.champion__groups {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 48rem) {
+  .champion__groups {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.champion__group {
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  border: 1px solid var(--color-border);
+}
+
+.champion__group-category {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.champion__group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.champion__group li {
+  position: relative;
+  padding-left: 1.1em;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.champion__group li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+/* 优点清单（/airports/ 用） */
+.champion__advantages {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+@media (min-width: 48rem) {
+  .champion__advantages {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.champion__advantages li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.champion__advantages li::before {
+  content: '✓';
+  flex-shrink: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.champion__conclusion {
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.champion__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 0.4em;
+  padding: 0.85em 1.75em;
+  border-radius: var(--radius);
+  background: var(--gradient-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--theme-transition), box-shadow var(--theme-transition), gap var(--theme-transition);
+}
+
+.champion__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+  gap: 0.6em;
+}
+
+/* 第二名：中等分量——比第三名多一点色彩层次，但明显克制于第一名 */
+.top-pick--second {
+  padding: var(--space-4);
+  gap: var(--space-3);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 5%, var(--color-surface)) 0%, color-mix(in srgb, var(--color-surface) 88%, transparent) 70%);
+}
+
+.top-pick--second:hover {
+  box-shadow: var(--shadow-md), 0 0 0 2px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.top-pick--second .top-pick__rank {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1rem;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.top-pick--second .top-pick__name {
+  font-size: 1.125rem;
+}
+
+.top-pick--second .top-pick__desc {
+  font-size: 0.9375rem;
+}
+
+.top-pick--second .top-pick__cta {
+  margin-top: var(--space-3);
+  color: var(--color-primary);
+}
+
+/* 第三名：简洁克制，但仍有轻微层次，不是纯白矩形 */
+.top-pick--third {
+  padding: var(--space-4);
+  gap: var(--space-2);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--color-text) 3%, var(--color-surface)) 0%, color-mix(in srgb, var(--color-surface) 86%, transparent) 70%);
+}
+
+.top-pick--third:hover {
+  box-shadow: var(--shadow-sm), 0 0 0 2px color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.top-pick--third .top-pick__rank {
+  width: 1.875rem;
+  height: 1.875rem;
+  font-size: 0.875rem;
+  background: var(--color-surface-soft);
+  color: var(--color-muted);
+}
+
+.top-pick--third .top-pick__name {
+  font-size: 1rem;
+}
+
+.top-pick--third .top-pick__desc {
+  font-size: 0.875rem;
+}
+
+.top-pick--third .top-pick__cta {
+  margin-top: var(--space-2);
+  color: var(--color-primary);
+  font-size: 0.8125rem;
 }
 
 .feature-list {
@@ -306,38 +1088,89 @@ button:focus-visible {
 }
 
 .feature-list li {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color var(--theme-transition), transform var(--theme-transition), box-shadow var(--theme-transition);
+}
+
+.feature-list li:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-list li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-top: 0.125rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
+}
+
+.feature-list li::after {
+  content: '';
+  position: absolute;
+  width: 0.8125rem;
+  height: 0.8125rem;
+  top: calc(var(--space-4) + 0.5625rem);
+  left: calc(var(--space-4) + 0.4375rem);
+  background-color: var(--color-primary);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 10.5l3 3 7-7' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+.content-group {
+  margin: var(--space-6) 0;
+}
+
+.content-group h3 {
+  margin-bottom: var(--space-3);
+}
+
+.content-group__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .content-group__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.content-group__list li {
   padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-surface);
 }
 
-.roadmap-grid {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: var(--space-3);
-  margin: var(--space-4) 0 var(--space-12);
-}
-
-@media (min-width: 48rem) {
-  .roadmap-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.roadmap-card {
-  padding: var(--space-4);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius);
-  color: var(--color-muted);
-  font-size: 0.9375rem;
-}
-
-.roadmap-card strong {
+.content-group__list a {
   display: block;
+  font-weight: 600;
   color: var(--color-text);
   margin-bottom: var(--space-1);
+}
+
+.content-group__list p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
 }
 
 /* -------------------- Footer -------------------- */
@@ -438,6 +1271,25 @@ button:focus-visible {
   margin-top: 0;
 }
 
+/* 只作用于首页正文里的板块标题（不影响页脚的 h2），加一条细渐变竖线强化层级。 */
+body.home main > section > h2,
+body.home main > section > .section-head > h2 {
+  position: relative;
+  padding-left: var(--space-3);
+}
+
+body.home main > section > h2::before,
+body.home main > section > .section-head > h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--gradient-primary);
+}
+
 .entry-links {
   list-style: none;
   padding: 0;
@@ -453,10 +1305,39 @@ button:focus-visible {
 }
 
 .entry-links li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
   padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color var(--theme-transition), transform var(--theme-transition), box-shadow var(--theme-transition);
+}
+
+.entry-links li:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 0 2px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.entry-links__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+  color: var(--color-primary);
+}
+
+.entry-links__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .entry-links a {

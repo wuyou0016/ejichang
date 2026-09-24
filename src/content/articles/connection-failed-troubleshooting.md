@@ -32,7 +32,7 @@ relatedTopics:
 ## 第四步：区分"打不开"和"打得开但很慢"
 
 - **完全打不开、一直转圈或报错**：更像是连接层面的问题，回到第二步换节点，或检查本地网络本身是否正常（先关掉代理试试能不能直接访问其他网站）；
-- **能打开但很慢、经常卡顿**：更像是线路质量或晚高峰拥堵的问题，具体怎么理解测速和稳定性数据，可以看[机场测速怎么测、怎么看](/knowledge/airport-speed-test-explained/)；
+- **能打开但很慢、经常卡顿**：这不是"连不上"，属于另一种情况，现场能做的排查步骤见[机场节点慢怎么办](/troubleshooting/airport-node-slow/)，理解测速数据本身可以看[机场测速怎么测、怎么看](/knowledge/airport-speed-test-explained/)；
 - **打得开但显示"不是原生地区""无法播放"这类提示**：这属于流媒体/AI 服务对代理 IP 的限制，和客户端配置本身无关，具体可以看[机场"流媒体解锁"是什么意思](/knowledge/streaming-unlock-explained/)。
 
 ## 第五步：如果以上都排查过还是不行
@@ -42,5 +42,7 @@ relatedTopics:
 ## 你可能还想看
 
 - [机场订阅链接导入教程（通用步骤）](/tutorials/how-to-import-subscription/)
+- [机场节点慢怎么办？现在就能做的几件事](/troubleshooting/airport-node-slow/)
+- [Clash 导入订阅报错、解析失败怎么办](/troubleshooting/clash-import-failed/)
 - [机场客户端使用教程](/tutorials/)
 - [机场导航｜机场代理服务商目录](/airports/)

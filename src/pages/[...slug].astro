@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageShell from '../components/PageShell.astro';
+import BrandTable from '../components/BrandTable.astro';
+import BrandCard from '../components/BrandCard.astro';
+import CardGrid from '../components/CardGrid.astro';
+import Faq from '../components/Faq.astro';
+import { byId } from '../data/brands';
+import { resolveCanonicalUrl } from '../config/seo';
+import { siteConfig } from '../config/site';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2).map((h) => ({ text: h.text, slug: h.slug }));
+const iso = (v: Date) => v.toISOString().slice(0, 10);
+const path = `/${entry.id}/`;
+
+const crumbs = d.crumbs ?? [];
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: d.h1,
+  description: d.description,
+  dateModified: iso(d.updated),
+  datePublished: iso(d.updated),
+  author: { '@type': 'Organization', name: siteConfig.author.name },
+  url: resolveCanonicalUrl(path),
+};
+const meta = [d.kicker ?? '机场代理资料库', `更新 ${iso(d.updated)}`, '资料来源逐条标注', '本站未发布测速排名'];
+const brands = (d.brands ?? []).map((id) => byId(id));
+---
+
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  keywords={d.keywords}
+  robots={d.noindex ? { index: false, follow: true } : undefined}
+  ogType="article"
+  modifiedTime={iso(d.updated)}
+>
+  <PageShell h1={d.h1} crumbs={[...crumbs, { name: d.h1, href: path }]} lead={d.lead} meta={meta} toc={toc}>
+    <div class="prose"><Content /></div>
+    {
+      brands.length > 0 && (
+        <>
+          <h2>{d.brandTitle ?? '资料对照'}</h2>
+          {d.brandView === 'cards' ? (
+            <div class="bc-list bc-list--3d">
+              {brands.map((b, i) => (
+                <BrandCard brand={b} rank={i + 1} top={b.id === 'wuyou'} />
+              ))}
+            </div>
+          ) : (
+            <BrandTable ids={brands.map((b) => b.id)} />
+          )}
+        </>
+      )
+    }
+    {
+      d.cards && d.cards.length > 0 && (
+        <>
+          <h2>{d.cardsTitle ?? '继续阅读'}</h2>
+          <CardGrid items={d.cards} />
+        </>
+      )
+    }
+    <Faq items={d.faq ?? []} />
+    {
+      d.related && d.related.length > 0 && (
+        <div class="related-block">
+          <h2>相关阅读</h2>
+          <ul>
+            {d.related.map((r) => (
+              <li>
+                <a href={r.href}>{r.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </PageShell>
+  <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+</BaseLayout>

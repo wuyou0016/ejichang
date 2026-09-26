@@ -3,7 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="页面未找到" description="抱歉，你访问的页面不存在或已被移动。" robots={{ index: false, follow: true }}>
-  <h1>页面未找到</h1>
-  <p>抱歉，你访问的页面不存在，或者已经被移动。</p>
-  <p><a href="/">返回首页</a></p>
+  <main id="main" class="wrap notfound">
+    <b>404</b>
+    <h1>这个节点不在网络里</h1>
+    <p>页面可能已被移动，或链接有误。回到首页，从梯子、VPN、机场三个入口重新开始。</p>
+    <p><a class="btn btn-aff" href="/">回到首页</a></p>
+    <ul class="quick-links" style="justify-content:center">
+      <li><a href="/ladder/">梯子</a></li><li><a href="/vpn/">VPN</a></li><li><a href="/airports/">机场导航</a></li>
+      
+      <li><a href="/knowledge/">知识库</a></li>
+      <li><a href="/clients/">客户端教程</a></li>
+    </ul>
+  </main>
 </BaseLayout>

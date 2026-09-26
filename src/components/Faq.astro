@@ -1,0 +1,28 @@
+---
+interface Props {
+  items: { q: string; a: string }[];
+  title?: string;
+}
+const { items, title = '常见问题' } = Astro.props;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') } })),
+};
+const inline = (s: string) => s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+---
+
+{
+  items.length > 0 && (
+    <section class="faq">
+      <h2>{title}</h2>
+      {items.map((i) => (
+        <details>
+          <summary>{i.q}</summary>
+          <p set:html={inline(i.a)} />
+        </details>
+      ))}
+      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    </section>
+  )
+}

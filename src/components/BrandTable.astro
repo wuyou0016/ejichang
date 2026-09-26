@@ -1,0 +1,41 @@
+---
+import { brandHref, byId, has, priceLine, srcLabel, AFF_REL } from '../data/brands';
+
+interface Props {
+  ids: string[];
+  cols?: ('price' | 'line' | 'protocols' | 'nodes' | 'client' | 'src')[];
+}
+const { ids, cols = ['price', 'line', 'protocols', 'nodes', 'src'] } = Astro.props;
+const head: Record<string, string> = { price: '价格与口径', line: '线路', protocols: '协议', nodes: '节点地区', client: '客户端', src: '资料性质' };
+const cut = (s: string, n: number) => (s.length > n ? `${s.slice(0, n)}…` : s);
+const cell = (id: string, c: string) => {
+  const b = byId(id);
+  if (c === 'price') return priceLine(b);
+  if (c === 'src') return srcLabel(b);
+  const v = (b as unknown as Record<string, string>)[c] ?? '';
+  return has(v) ? cut(v, 46) : '暂无资料';
+};
+---
+
+<div class="tbl-wrap">
+  <table class="tbl brand-table wide">
+    <thead>
+      <tr><th>品牌</th>{cols.map((c) => <th>{head[c]}</th>)}<th>官网</th></tr>
+    </thead>
+    <tbody>
+      {
+        ids.map((id) => {
+          const b = byId(id);
+          const href = brandHref(b);
+          return (
+            <tr>
+              <th scope="row">{href ? <a href={href}>{b.name}</a> : b.name}</th>
+              {cols.map((c) => <td>{cell(id, c)}</td>)}
+              <td><a href={b.aff} target="_blank" rel={AFF_REL}>官网入口</a></td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>

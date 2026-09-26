@@ -1,59 +1,19 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import { resolveCanonicalUrl } from '../../config/seo';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import ArticleContent from '../../components/ArticleContent.astro';
+import { isDemoEntry } from '../../data/utils/demo-filter';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('articles', ({ data }) => data.type === 'knowledge');
-  return articles.map((article) => ({
-    params: { slug: article.id },
-    props: { article },
-  }));
+  const articles = await getCollection('articles', ({ id, data }) => !isDemoEntry(id) && data.type === 'knowledge');
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+interface Props {
+  article: CollectionEntry<'articles'>;
 }
 
 const { article } = Astro.props;
-const { Content } = await render(article);
-
-function formatDate(value: string | Date): string {
-  const date = typeof value === 'string' ? new Date(value) : value;
-  return date.toISOString().slice(0, 10);
-}
-
-const canonicalUrl = resolveCanonicalUrl(`/knowledge/${article.id}/`);
-const articleJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: article.data.title,
-  description: article.data.description,
-  url: canonicalUrl,
-  datePublished: new Date(article.data.publishedAt).toISOString(),
-  dateModified: new Date(article.data.updatedAt).toISOString(),
-};
 ---
 
-<BaseLayout
-  title={`${article.data.title}｜机场E家知识库`}
-  description={article.data.description}
-  ogType="article"
-  publishedTime={new Date(article.data.publishedAt).toISOString()}
-  modifiedTime={new Date(article.data.updatedAt).toISOString()}
->
-  <Breadcrumbs
-    items={[
-      { name: '知识库', href: '/knowledge/' },
-      { name: article.data.title, href: `/knowledge/${article.id}/` },
-    ]}
-  />
-
-  <article class="article-content">
-    <h1>{article.data.title}</h1>
-    <p class="article-meta">
-      {article.data.category}
-      {' · '}更新于 {formatDate(article.data.updatedAt)}
-    </p>
-    <Content />
-  </article>
-
-  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
-</BaseLayout>
+<ArticleContent article={article} hubLabel="知识库" hubHref="/knowledge/" />

@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageShell from './PageShell.astro';
+import CardGrid from './CardGrid.astro';
+import { isDemoEntry } from '../data/utils/demo-filter';
+import { getArticleHref } from '../data/utils/article-routing';
+
+interface Props {
+  type: 'knowledge' | 'tutorial' | 'troubleshooting';
+  title: string;
+  description: string;
+  h1: string;
+  lead: string;
+  crumbName: string;
+  href: string;
+  intro?: string;
+}
+const { type, title, description, h1, lead, crumbName, href, intro } = Astro.props;
+const all = await getCollection('articles', ({ id, data }) => !isDemoEntry(id) && data.type === type);
+const groups = new Map<string, typeof all>();
+for (const a of all.sort((x, y) => +new Date(y.data.updatedAt) - +new Date(x.data.updatedAt))) {
+  const k = a.data.category;
+  groups.set(k, [...(groups.get(k) ?? []), a]);
+}
+---
+
+<BaseLayout title={title} description={description}>
+  <PageShell h1={h1} crumbs={[{ name: crumbName, href }]} lead={lead} meta={[`${all.length} 篇`, '持续更新']}>
+    {intro && <p>{intro}</p>}
+    {
+      [...groups.entries()].map(([cat, items]) => (
+        <>
+          <h2>{cat}</h2>
+          <CardGrid items={items.map((a) => ({ href: getArticleHref(a), title: a.data.title, desc: a.data.description, tag: cat }))} />
+        </>
+      ))
+    }
+  </PageShell>
+</BaseLayout>

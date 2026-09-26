@@ -1,302 +1,100 @@
 ---
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import SourceBadge from '../../components/SourceBadge.astro';
-import { isDemoEntry } from '../../data/utils/demo-filter';
-import { isProviderPublishable } from '../../data/utils/provider-publish-gate';
+import PageShell from '../../components/PageShell.astro';
+import BrandTable from '../../components/BrandTable.astro';
+import Faq from '../../components/Faq.astro';
+import { BRANDS, PICKS_ORDER, WUYOU_PLANS, has, priceLine, srcLabel, AFF_REL, type Brand } from '../../data/brands';
 import { resolveCanonicalUrl } from '../../config/seo';
+import { siteConfig } from '../../config/site';
 
 export async function getStaticPaths() {
-  const [providers, tests] = await Promise.all([
-    getCollection('providers', ({ id }) => !isDemoEntry(id)),
-    getCollection('tests', ({ id }) => !isDemoEntry(id)),
-  ]);
-
-  // 发布门槛在这里、也只在这里判断：不达标的 Provider 根本不会有 params，
-  // 不会生成 URL，不依赖后续用 noindex 补救。
-  const publishable = providers.filter((provider) => isProviderPublishable(provider, tests));
-
-  return publishable.map((provider) => ({
-    params: { slug: provider.data.slug },
-    props: { provider },
-  }));
+  return Object.values(BRANDS)
+    .filter((b) => b.slug)
+    .map((b) => ({ params: { slug: b.slug! }, props: { id: b.id } }));
 }
 
-interface Props {
-  provider: CollectionEntry<'providers'>;
-}
+const { id } = Astro.props;
+const b: Brand = BRANDS[id]!;
+const isWuyou = b.id === 'wuyou';
+const hasData = b.tier !== 4;
+const others = PICKS_ORDER.filter((x) => x !== b.id).slice(0, 4);
+const short = (s: string) => s.replace(/（.*?）/g, '');
 
-const { provider } = Astro.props;
+const title = hasData ? `${b.name}怎么样？价格、线路与协议资料速查｜机场E家` : `${b.name}官方入口与资料状态｜机场E家`;
+const desc = hasData
+  ? `${b.name}资料速查：${priceLine(b).slice(0, 36)}；${has(b.line) ? short(b.line).slice(0, 16) + '；' : ''}资料性质为${srcLabel(b)}，附买前检查清单与同类对照，价格以官网为准。`
+  : `${b.name}只登记了官方推广入口，价格、线路、协议暂无可核实的公开资料；购买前请以官网页面为准，并先小额试用。`;
 
-const [tests, rankings] = await Promise.all([
-  getCollection('tests', ({ id }) => !isDemoEntry(id)),
-  getCollection('rankings', ({ id }) => !isDemoEntry(id)),
-]);
-
-const providerTests = tests.filter((test) => test.data.providerId.id === provider.id);
-const providerRankings = rankings.filter((ranking) =>
-  ranking.data.entries.some((entry) => entry.providerId.id === provider.id),
-);
-
-const statusLabel: Record<CollectionEntry<'providers'>['data']['status'], string> = {
-  active: '正常运营',
-  inactive: '暂停服务',
-  discontinued: '已停止服务',
-  watch: '观察中',
-};
-
-const hasEditorial =
-  provider.data.editorial.summary.trim().length > 0 &&
-  (provider.data.editorial.pros.length > 0 || provider.data.editorial.cons.length > 0);
-
-function formatDate(value: string | Date): string {
-  const date = typeof value === 'string' ? new Date(value) : value;
-  return date.toISOString().slice(0, 10);
-}
-
-const uniqueThirdPartySources = new Set(
-  (provider.data.thirdPartyNotes ?? []).map((note) => note.source.split('（')[0].trim()),
-);
-
-// Title / description / H1 / 开篇摘要刻意采用"资料核实、多方来源比对"的角度，
-// 而不是"评测与使用指南"。这不是为了和姊妹站 RocketJichang.com 的同款页面
-// 制造表面差异，而是因为机场E家对这批服务商的 editorial.summary 本身就是
-// 围绕"官方入口能不能核实 + 第三方来源之间是否互相印证"写的（见
-// src/data/providers/providers.json），用这个角度组织标题和摘要，是在如实
-// 反映本站这批内容真实的写作重点，而不是编出一个新说法。
-const descriptionParts: string[] = [`${provider.data.name}的官方公开信息`];
-if (uniqueThirdPartySources.size > 0) {
-  descriptionParts.push(`来自 ${uniqueThirdPartySources.size} 个独立第三方来源的资料`);
-}
-if (providerTests.length > 0) descriptionParts.push('本站实测数据');
-const description = `机场E家核实了${descriptionParts.join('、')}，按来源分别标注，帮助你在下单前自行判断${provider.data.name}的真实情况。`;
-
-const title = `${provider.data.name}资料能核实吗？整理官方与第三方来源｜机场E家`;
-const h1 = `${provider.data.name}｜官方与第三方资料核实`;
-
-// 开篇摘要段：只用页面已经在算的这几个真实布尔值/数字拼句子，不额外引入
-// 任何新事实，帮读者不用往下翻就知道这页有没有本站实测、有几个第三方来源。
-const introParts: string[] = [];
-if (providerTests.length > 0) introParts.push('本站实测数据');
-if (uniqueThirdPartySources.size > 0) introParts.push(`${uniqueThirdPartySources.size} 个独立第三方来源的资料`);
-if (hasEditorial) introParts.push('机场E家的核实说明');
-const introSummary =
-  introParts.length > 0
-    ? `这篇页面整理并核对了${provider.data.name}目前公开可查的资料，包括${introParts.join('、')}，并按来源分别标注，帮助你在下单前自行判断。`
-    : `这篇页面整理了${provider.data.name}目前公开可查的官方信息，暂无本站实测或第三方资料可供核对，机场E家会持续跟进补充。`;
-
-const canonicalUrl = resolveCanonicalUrl(`/airports/${provider.data.slug}/`);
-const lastUpdated = new Date(provider.data.updatedAt);
-
-const webPageJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: title,
-  description,
-  url: canonicalUrl,
-};
+const chips = [
+  ['价格', priceLine(b)],
+  ['线路', has(b.line) ? b.line : '暂无资料'],
+  ['协议', has(b.protocols) ? b.protocols : '暂无资料'],
+  ['节点', has(b.nodes) ? b.nodes : '暂无资料'],
+];
+const faq = [
+  { q: `${b.name}适合新手吗？`, a: `${b.fit}。如果你只是想第一次试用梯子或机场，先买最低档包月，别一上来买年付。` },
+  { q: `${b.name}的价格靠谱吗？`, a: `${priceLine(b)}。价格口径与活动以官网结算页为准；本站不把不同品牌的流量大小或每 GB 单价拿来对比。` },
+  { q: `${b.name}的资料是哪里来的？`, a: `资料性质：${srcLabel(b)}（${b.source}）。本站没有对它做速度或稳定性实测，不给评分。` },
+  { q: `买${b.name}前要检查什么？`, a: '看退款规则、设备数限制、订阅方式和客户端支持，然后包月试用几个晚高峰；细节见[机场怎么选](/knowledge/how-to-choose-an-airport-proxy/)。' },
+];
+const path = `/airports/${b.slug}/`;
+const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: title, description: desc, dateModified: '2026-09-26', author: { '@type': 'Organization', name: siteConfig.author.name }, url: resolveCanonicalUrl(path) };
 ---
 
-<BaseLayout title={title} description={description}>
-  <Breadcrumbs
-    items={[
-      { name: '机场导航', href: '/airports/' },
-      { name: provider.data.name, href: `/airports/${provider.data.slug}/` },
-    ]}
-  />
+<BaseLayout title={title} description={desc} keywords={[b.name, `${b.name}怎么样`, `${b.name}机场`]} ogType="article" modifiedTime="2026-09-26">
+  <PageShell h1={hasData ? `${b.name}怎么样` : `${b.name}：官方入口与资料状态`} crumbs={[{ name: '机场导航', href: '/airports/' }, { name: b.name, href: path }]} lead={b.tagline} meta={['品牌资料', '更新 2026-09-26', srcLabel(b)]}>
+    <div class="keybox"><span class="keybox-label">一句话结论</span><p>{b.fit}。{b.caution}</p></div>
 
-  <h1>{h1}</h1>
-  <p>{introSummary}</p>
-
-  <dl class="quick-facts">
-    <div>
-      <dt>状态</dt>
-      <dd class={`status-dot status-dot--${provider.data.status}`}>{statusLabel[provider.data.status]}</dd>
+    <h2>资料速查</h2>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>项目</th><th>内容</th></tr></thead>
+        <tbody>
+          {chips.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}
+          <tr><th scope="row">客户端</th><td>{has(b.client) ? b.client : '暂无资料'}</td></tr>
+          <tr><th scope="row">资料性质</th><td>{srcLabel(b)}（{b.source}）</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div>
-      <dt>信息最后核实时间</dt>
-      <dd>{formatDate(provider.data.lastVerified)}</dd>
-    </div>
-  </dl>
 
-  <h2>官方公开信息</h2>
-  <div class="info-panel info-panel--vendor">
-    <SourceBadge type="vendor" />
-    <p>{provider.data.vendor.description}</p>
-    <ul>
-      <li>
-        官网：
-        <a href={provider.data.vendor.officialWebsite} rel="nofollow noopener" target="_blank" class="outbound-link">
-          访问 {provider.data.name} 官网<span class="outbound-link__icon" aria-hidden="true">↗</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  {providerTests.length > 0 && (
-    <>
-      <h2>本站测试</h2>
-      <div class="info-panel info-panel--in-house">
-        <SourceBadge type="in-house" />
-        {providerTests.map((test) => (
-          <div class="test-record">
-            <p>测试日期：{formatDate(test.data.date)}</p>
-            <p>测试方法：{test.data.methodology}</p>
-            <dl>
-              <dt>测试地区</dt>
-              <dd>{test.data.environment.location}</dd>
-              <dt>测试网络</dt>
-              <dd>{test.data.environment.network}</dd>
-              <dt>测试客户端</dt>
-              <dd>{test.data.environment.client}</dd>
-              <dt>测试协议</dt>
-              <dd>{test.data.environment.protocol}</dd>
-            </dl>
-            {test.data.results?.streaming && test.data.results.streaming.length > 0 && (
-              <ul>
-                {test.data.results.streaming.map((item) => (
-                  <li>
-                    {item.platform}：{item.unlocked ? '已解锁' : '未解锁'}
-                    {item.notes && `（${item.notes}）`}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {test.data.notes && <p>备注：{test.data.notes}</p>}
+    {
+      isWuyou && (
+        <>
+          <h2>三档套餐（官方页面）</h2>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>档位</th><th>计费</th><th>价格</th></tr></thead>
+              <tbody>
+                {WUYOU_PLANS.map((p) => <tr><th scope="row">{p.name}</th><td>{p.billing.replace('，低至', '')}</td><td>{/低至/.test(p.billing) ? '低至' : '约'} ¥{p.m}/月{p.name === '省心' ? '起' : ''}</td></tr>)}
+              </tbody>
+            </table>
           </div>
-        ))}
-      </div>
-    </>
-  )}
-
-  {hasEditorial && (
-    <>
-      <h2>编辑结论</h2>
-      <div class="info-panel info-panel--editorial">
-        <SourceBadge type="editorial" />
-        <p>{provider.data.editorial.summary}</p>
-        {(provider.data.editorial.suitableFor.length > 0 || provider.data.editorial.notSuitableFor.length > 0) && (
-          <div class="suitability">
-            {provider.data.editorial.suitableFor.length > 0 && (
-              <div class="suitability__group suitability__group--for">
-                <h3>适合什么人</h3>
-                <ul>
-                  {provider.data.editorial.suitableFor.map((item) => (
-                    <li>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {provider.data.editorial.notSuitableFor.length > 0 && (
-              <div class="suitability__group suitability__group--against">
-                <h3>不适合什么人</h3>
-                <ul>
-                  {provider.data.editorial.notSuitableFor.map((item) => (
-                    <li>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
-        {provider.data.editorial.pros.length > 0 && (
-          <>
-            <h3>优点</h3>
-            <ul>
-              {provider.data.editorial.pros.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </>
-        )}
-        {provider.data.editorial.cons.length > 0 && (
-          <>
-            <h3>需要注意的地方</h3>
-            <ul>
-              {provider.data.editorial.cons.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-    </>
-  )}
-
-  {provider.data.thirdPartyNotes && provider.data.thirdPartyNotes.length > 0 && (
-    <>
-      <h2>第三方资料</h2>
-      <div class="info-panel info-panel--third-party">
-        <SourceBadge type="third-party" />
-        <ul class="note-list">
-          {provider.data.thirdPartyNotes.map((note) => (
-            <li>
-              <p class="note-list__source">{note.source} · {formatDate(note.date)}</p>
-              <p class="note-list__claim">{note.claim}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
-  )}
-
-  {providerRankings.length > 0 && (
-    <>
-      <h2>相关榜单</h2>
-      <ul class="quick-links">
-        {providerRankings.map((ranking) => (
-          <li>
-            <a href={ranking.id === 'overall' ? '/rankings/' : `/rankings/${ranking.id}/`}>{ranking.data.title}</a>
-          </li>
-        ))}
-      </ul>
-    </>
-  )}
-
-  <h2>下单前建议再检查这几件事</h2>
-  <ul class="quick-links">
-    <li>这家的支付方式是否正规、出问题能不能追溯，参考<a href="/knowledge/airport-payment-methods/">机场怎么付款？常见支付方式和注意事项</a></li>
-    <li>有没有跑路风险信号（比如超低价终身套餐、公告长期停更），参考<a href="/knowledge/airport-scam-risk/">机场"跑路"风险怎么识别</a></li>
-    <li>是不是非买不可，还是免费方案或自建节点更适合你，参考<a href="/knowledge/free-vs-paid-airport/">免费机场和付费机场有什么区别</a>、<a href="/knowledge/airport-vs-self-hosted/">机场代理和自建节点有什么区别</a></li>
-  </ul>
-
-  <p>你可能还想看：</p>
-  <ul class="quick-links">
-    <li><a href="/airports/">查看更多机场导航</a></li>
-    <li><a href="/rankings/">查看机场推荐</a></li>
-    <li><a href="/knowledge/how-to-choose-an-airport-proxy/">机场代理怎么选</a></li>
-  </ul>
-
-  <p>本页最后更新于 {formatDate(lastUpdated)}。信息按来源分为官方公开信息、第三方资料与编辑观点，分别标注。</p>
-
-  <script type="application/ld+json" set:html={JSON.stringify(webPageJsonLd)} />
-</BaseLayout>
-
-<style>
-  .suitability {
-    display: grid;
-    gap: 1rem;
-    margin: 1rem 0 1.5rem;
-  }
-  @media (min-width: 640px) {
-    .suitability {
-      grid-template-columns: 1fr 1fr;
+        </>
+      )
     }
-  }
-  .suitability__group {
-    border-radius: 0.5rem;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--color-border, #2a3352);
-  }
-  .suitability__group--for {
-    border-left: 3px solid var(--color-accent, #10b981);
-  }
-  .suitability__group--against {
-    border-left: 3px solid var(--color-accent-2, #7c5cff);
-  }
-  .suitability__group h3 {
-    margin-top: 0;
-  }
-</style>
+
+    {b.facts.length > 0 && (<><h2>已整理的事实</h2><ul class="lst">{b.facts.map((f) => <li>{f}</li>)}</ul></>)}
+
+    <h2>谁适合，谁先别买</h2>
+    <div class="cards-grid">
+      <div class="card-link"><i>适合</i><b>{b.fit}</b></div>
+      <div class="card-link"><i>先看清</i><b>{b.caution}</b></div>
+    </div>
+
+    <p><a class="btn btn-aff btn-lg" href={b.aff} target="_blank" rel={AFF_REL}>访问{b.name}官网</a> <span class="bc-disc">联盟推广链接，价格以官网为准</span></p>
+
+    <h2>买前检查清单</h2>
+    <ol class="steps">
+      <li><h3>先买包月</h3><p>最低档包月即可，退款、续费规则先看完再付款。</p></li>
+      <li><h3>确认设备数与客户端</h3><p>你要用的手机、电脑、路由器是否都支持，见 <a href="/clients/">客户端教程</a>。</p></li>
+      <li><h3>晚高峰试几天</h3><p>只在深夜测一次没有意义，连续几天在你常用的时段观察是否稳定。</p></li>
+      <li><h3>另备一个低价备用</h3><p>任何服务都可能临时抽风，备用方案见 <a href="/ladder/">梯子怎么选</a> 和 <a href="/vpn/">VPN 怎么选</a>。</p></li>
+    </ol>
+
+    <h2>和同类并排看</h2>
+    <BrandTable ids={[b.id, ...others]} cols={['price', 'line', 'protocols', 'src']} />
+
+    <Faq items={faq} />
+  </PageShell>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</BaseLayout>

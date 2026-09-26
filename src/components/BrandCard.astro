@@ -1,0 +1,38 @@
+---
+import { brandHref, has, priceLine, srcLabel, AFF_REL, type Brand } from '../data/brands';
+
+interface Props {
+  brand: Brand;
+  rank?: number;
+  top?: boolean;
+  cta?: string;
+}
+
+const { brand: b, rank, top = false, cta = '访问官网' } = Astro.props;
+const first = (s: string, n: number) => s.replace(/（.*?）/g, '').split(/[，,；;]/)[0]!.trim().slice(0, n);
+const tags: { k: boolean; t: string }[] = [];
+if (has(b.line)) tags.push({ k: true, t: first(b.line, 18) });
+if (has(b.protocols)) tags.push({ k: false, t: first(b.protocols, 24) });
+if (has(b.nodes)) tags.push({ k: false, t: first(b.nodes, 18) });
+if (!tags.length) tags.push({ k: false, t: '资料有限' });
+const href = brandHref(b);
+---
+
+<article class:list={['bc', 'bc--3d', { 'is-top': top }]} data-brand={b.id} data-tilt>
+  <header class="bc-head">
+    {rank !== undefined && <span class="bc-rank">{String(rank).padStart(2, '0')}</span>}
+    <h3 class="bc-name">
+      {href ? <a href={href}>{b.name}</a> : b.name}
+      {b.alias && <small>{b.alias}</small>}
+    </h3>
+    {top && <span class="bc-badge">首推</span>}
+  </header>
+  <p class="bc-tag">{b.tagline}</p>
+  <ul class="bc-tags">{tags.map((t) => <li class={t.k ? 'k' : ''}>{t.t}</li>)}</ul>
+  <p class="bc-warn"><b>价格</b>{priceLine(b)}</p>
+  <footer class="bc-foot">
+    <span class="bc-src">资料性质：{srcLabel(b)}</span>
+    {href && <a class="btn" href={href}>看资料</a>}
+    <a class="btn btn-aff" href={b.aff} target="_blank" rel={AFF_REL}>{cta}</a>
+  </footer>
+</article>

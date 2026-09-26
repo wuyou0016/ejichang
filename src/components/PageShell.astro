@@ -1,0 +1,74 @@
+---
+// 内容页统一外壳：正文 + 右侧栏（首推 + 目录 + 入口）。
+import Breadcrumbs from './Breadcrumbs.astro';
+import { BRANDS, AFF_REL } from '../data/brands';
+
+export interface Crumb {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  h1: string;
+  crumbs?: Crumb[];
+  lead?: string;
+  meta?: string[];
+  toc?: { text: string; slug: string }[];
+}
+
+const { h1, crumbs = [], lead, meta = [], toc = [] } = Astro.props;
+const w = BRANDS.wuyou!;
+const scenes: [string, string][] = [
+  ['梯子怎么选', '/ladder/'],
+  ['VPN 怎么选', '/vpn/'],
+  ['机场导航', '/airports/'],
+  ['订阅链接', '/subscription/'],
+  ['客户端教程', '/clients/'],
+  ['协议对比', '/protocols/'],
+  ['排错清单', '/troubleshooting/'],
+  ['知识库', '/knowledge/'],
+];
+const pathname = Astro.url.pathname;
+---
+
+<div class="wrap page">
+  <main id="main">
+    <article class="content">
+      <Breadcrumbs items={crumbs} />
+      <h1>{h1}</h1>
+      {meta.length > 0 && <p class="meta-row">{meta.map((m) => <span>{m}</span>)}</p>}
+      {lead && <p class="lede">{lead}</p>}
+      <slot />
+    </article>
+  </main>
+  <aside class="rail" aria-label="场景导航">
+    <div class="rail-card rail-top">
+      <h2>首推</h2>
+      <strong>{w.name}</strong>
+      <p>价格、线路、协议、节点都有官方页面表述，资料在收录品牌里最完整。</p>
+      <a class="btn btn-aff" href={w.aff} target="_blank" rel={AFF_REL}>访问官网</a>
+    </div>
+    {
+      toc.length >= 3 && (
+        <div class="rail-card">
+          <h2>本文目录</h2>
+          <div class="toc">
+            {toc.map((t) => (
+              <a href={`#${t.slug}`}>{t.text}</a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+    <div class="rail-card">
+      <h2>主题入口</h2>
+      <ul>
+        {scenes.map(([t, u]) => (
+          <li>
+            <a href={u} aria-current={pathname === u ? 'page' : undefined}>{t}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </aside>
+</div>

@@ -1,250 +1,111 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { siteConfig } from '../config/site';
-import { getRankingPageData } from '../data/utils/ranking-entries';
-import { resolveCanonicalUrl } from '../config/seo';
+import BrandCard from '../components/BrandCard.astro';
+import BrandTable from '../components/BrandTable.astro';
+import Faq from '../components/Faq.astro';
+import { BRANDS, PICKS_ORDER, WUYOU_PLANS, AFF_REL } from '../data/brands';
 import { getArticleHref } from '../data/utils/article-routing';
-import homepageTopPicks from '../data/utils/homepage-top-picks.json';
+import { isDemoEntry } from '../data/utils/demo-filter';
+import { resolveCanonicalUrl } from '../config/seo';
 
-const { entries: overallEntries } = await getRankingPageData('overall');
-const topPicks = overallEntries.slice(0, 3);
+const w = BRANDS.wuyou!;
+const top7 = PICKS_ORDER.slice(0, 7);
+const articles = (await getCollection('articles', ({ id }) => !isDemoEntry(id)))
+  .sort((a, b) => +new Date(b.data.updatedAt) - +new Date(a.data.updatedAt))
+  .slice(0, 6);
 
-// 首页 TOP3 的展示文案：优先用 homepage-top-picks.json 里为当前排名前三准备的
-// 版本（篇幅按名次分层——第一名更完整，避免和 /rankings/ 页面统一长度的列表冲突）；
-// 如果排名变化导致某个 provider 不在这份数据里，回退到榜单本身的 reason 字段，
-// 保证内容始终来自真实数据，不会出现空白或硬编码内容。
-type TopPickCopy = { tag?: string; highlights?: string[]; description: string };
-const topPickCopy: Record<string, TopPickCopy> = homepageTopPicks;
-function getTopPickCopy(providerSlug: string, fallback: string): TopPickCopy {
-  return topPickCopy[providerSlug] ?? { description: fallback };
-}
-
-const topPicksItemListJsonLd =
-  topPicks.length > 0
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'ItemList',
-        name: '机场推荐综合榜 TOP 3',
-        itemListElement: topPicks.map((entry) => ({
-          '@type': 'ListItem',
-          position: entry.finalRank,
-          name: entry.providerName,
-          url: resolveCanonicalUrl(`/airports/${entry.providerSlug}/`),
-        })),
-      }
-    : null;
-
-// 首页"机场知识与使用指南"：按三个真实主题精选已发布的文章，不是自动列出
-// 全部文章——slug 列表就是编辑上的取舍，标题/摘要仍然从 Content Collection
-// 里取，不会和文章本身的元数据脱节。某个 slug 还没发布时会被安全跳过，不会
-// 出现空链接或死链。
-const allArticles = await getCollection('articles');
-const articleBySlug = new Map(allArticles.map((article) => [article.id, article]));
-
-function pickArticles(slugs: string[]) {
-  return slugs
-    .map((slug) => articleBySlug.get(slug))
-    .filter((article): article is (typeof allArticles)[number] => Boolean(article))
-    .map((article) => ({
-      href: getArticleHref(article),
-      title: article.data.title,
-      description: article.data.description,
-    }));
-}
-
-const contentGroups = [
-  {
-    id: 'choose',
-    title: '机场选择',
-    items: pickArticles(['what-is-airport-proxy', 'how-to-choose-an-airport-proxy', 'protocols-compared', 'airport-nodes-guide']),
-  },
-  {
-    id: 'use',
-    title: '机场使用',
-    items: pickArticles(['clash-desktop-setup', 'ios-shadowrocket-setup', 'android-setup', 'airport-subscription-guide']),
-  },
-  {
-    id: 'troubleshoot',
-    title: '常见问题',
-    items: pickArticles(['connection-failed-troubleshooting', 'clash-import-failed', 'airport-node-slow', 'streaming-unlock-explained']),
-  },
-].filter((group) => group.items.length > 0);
+const entries = [
+  { href: '/ladder/', tag: '梯子', title: '梯子怎么选', desc: '便宜、稳定、免费三种需求怎么判断' },
+  { href: '/vpn/', tag: 'VPN', title: 'VPN 怎么选', desc: '一键连的 VPN 适合谁、风险在哪' },
+  { href: '/airports/', tag: '机场', title: '机场导航', desc: '29 个品牌入口与价格线路资料' },
+  { href: '/subscription/', tag: '订阅', title: '订阅链接', desc: '订阅是什么、怎么导入、怎么转换' },
+  { href: '/clients/', tag: '教程', title: '客户端教程', desc: 'Clash、小火箭、安卓一步步照做' },
+  { href: '/protocols/', tag: '协议', title: '协议对比', desc: 'SS、Trojan、VLESS、Hysteria2 怎么选' },
+  { href: '/troubleshooting/', tag: '排错', title: '排错清单', desc: '连不上、太慢、订阅失败先查什么' },
+];
+const faq = [
+  { q: '梯子、VPN、机场有什么区别？', a: '梯子是口语统称。VPN 通常是官方 App 一键连；机场是订阅链接加客户端，可以自定义规则。详见[梯子怎么选](/ladder/)与[VPN 怎么选](/vpn/)。' },
+  { q: '第一次用，应该先买哪个？', a: '先买最低档包月试用，晚高峰用几天再决定是否续费；不要一上来买年付。机场先看[机场导航](/airports/)里资料相对完整的几家。' },
+  { q: '机场E家的排序是测速名次吗？', a: '不是。本站没有对任何服务做速度或稳定性实测，也不给评分。顺序按公开资料是否完整、来源是否可核实排列。' },
+  { q: '价格为什么写成“包月起步”“年付折算”？', a: '不同服务商口径不同，本站分开标注，不直接比较。价格与活动以官网结算页为准。' },
+  { q: '订阅导入失败怎么办？', a: '先查订阅链接是否完整、客户端是否为最新版、系统时间是否准确，再看[订阅导入失败排查](/troubleshooting/clash-import-failed/)。' },
+];
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '机场E家机场精选',
+  itemListElement: top7.map((id, i) => ({ '@type': 'ListItem', position: i + 1, name: BRANDS[id]!.name, url: BRANDS[id]!.slug ? resolveCanonicalUrl(`/airports/${BRANDS[id]!.slug}/`) : undefined })),
+};
 ---
 
 <BaseLayout
-  title={siteConfig.defaultTitle}
-  description={siteConfig.defaultDescription}
-  keywords={['机场代理', '机场导航', '机场推荐', '性价比机场', '机场E家']}
-  bodyClass="home"
+  title="机场E家｜梯子、VPN、机场导航与选购资料站"
+  description="机场E家整理梯子、VPN、机场代理的选购资料：价格、线路、协议逐条标注来源，附客户端教程与排错清单，首推无忧链接，不发布没有依据的测速与评分。"
+  keywords={['梯子', 'VPN', '机场导航', '机场推荐', '便宜梯子', '稳定梯子', '翻墙']}
 >
-  <section class="hero">
-    <div class="hero__glow hero__glow--a" aria-hidden="true"></div>
-    <div class="hero__glow hero__glow--b" aria-hidden="true"></div>
-    <div class="hero__glow hero__glow--c" aria-hidden="true"></div>
-    <div class="hero__inner">
-      <span class="hero__eyebrow">机场代理导航与推荐</span>
-      <h1 class="hero__title">快、稳、能<span class="hero__title-accent">解锁流媒体</span>的机场怎么选</h1>
-      <p class="hero__lead">
-        机场E家整理机场代理的官方信息、第三方资料与站长实测，把延迟、解锁情况、套餐价格这些真实数据摆出来，帮你少踩坑、快速挑到适合自己的机场代理。
-      </p>
+  <main id="main" class="wrap">
+    <section class="hero">
+      <div>
+        <h1>梯子、VPN、机场，<em>先找入口</em>再动手</h1>
+        <p class="lead">机场E家把三类工具的选购资料放在一起：该选哪一类、哪家资料完整、怎么导入、连不上怎么查。价格与线路逐条标注来源，没有依据的测速和评分一律不写。</p>
+        <div class="ctas">
+          <a class="btn btn-lg" href="/ladder/">梯子怎么选</a>
+          <a class="btn btn-lg btn-ghost" href="/vpn/">VPN 怎么选</a>
+          <a class="btn btn-lg btn-aff" href="/airports/">机场导航</a>
+        </div>
+      </div>
+      <div class="stickers">
+        <a class="stk" href="/ladder/">梯子<small>便宜 · 稳定 · 免费</small></a>
+        <a class="stk" href="/vpn/">VPN<small>一键连的取舍</small></a>
+        <a class="stk" href="/airports/">机场<small>订阅 + 客户端</small></a>
+        <a class="stk" href="/clients/">教程<small>照着做就能连</small></a>
+      </div>
+    </section>
+
+    <h2 class="sec-h">选购入口</h2>
+    <div class="scene-grid">
+      {entries.map((e) => <a class="scene" href={e.href}><i>{e.tag}</i><b>{e.title}</b><span>{e.desc}</span></a>)}
     </div>
-  </section>
 
-  {
-    topPicks.length > 0 && (
-      <section aria-labelledby="top-picks">
-        <div class="section-head">
-          <h2 id="top-picks">当前综合推荐 TOP {topPicks.length}</h2>
-          <a href="/rankings/">查看完整机场推荐 →</a>
-        </div>
-        <ol class="top-picks">
-          {topPicks.map((entry) => {
-            const tier = entry.finalRank === 1 ? 'first' : entry.finalRank === 2 ? 'second' : 'third';
-            const copy = getTopPickCopy(entry.providerSlug, entry.reason);
-            return (
-              <li class={`top-pick top-pick--${tier}`}>
-                <div class="top-pick__head">
-                  <span class="top-pick__rank" aria-hidden="true">
-                    {entry.finalRank}
-                  </span>
-                  <div class="top-pick__heading">
-                    <a href={`/airports/${entry.providerSlug}/`} class="top-pick__name">
-                      <span class="sr-only">第 {entry.finalRank} 名：</span>
-                      {entry.providerName}
-                    </a>
-                    {copy.tag && <span class="top-pick__tag">{copy.tag}</span>}
-                  </div>
-                </div>
-                {copy.highlights && copy.highlights.length > 0 && (
-                  <ul class="top-pick__highlights">
-                    {copy.highlights.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                )}
-                <p class="top-pick__desc">{copy.description}</p>
-                <a
-                  href={`/airports/${entry.providerSlug}/`}
-                  class="top-pick__cta"
-                  data-analytics-event="recommendation_card_click"
-                  data-provider={entry.providerSlug}
-                  data-provider-name={entry.providerName}
-                  data-cta-label={`首页TOP${entry.finalRank}`}
-                >
-                  查看详情 →
-                </a>
-              </li>
-            );
-          })}
-        </ol>
-      </section>
-    )
-  }
+    <section class="feat" aria-label="首推">
+      <div>
+        <span class="feat-tag">首推</span>
+        <h2 class="feat-h">{w.name}</h2>
+        <p class="feat-p">第一次试用机场，先从资料相对完整的开始：价格、线路、协议、节点都有官方页面表述。</p>
+        <ul class="feat-list">
+          {WUYOU_PLANS.map((p) => <li><b>{p.name}</b> {p.billing.replace('，', ' ')}{/低至/.test(p.billing) ? '' : '约'} ¥{p.m}/月{p.name === '省心' ? '起' : ''}</li>)}
+        </ul>
+        <p class="feat-s">官方页面写明 IPLC / IEPL 线路，协议 VLESS、Trojan、Hysteria2；本站没有实测，请小额包月试用后再决定。</p>
+      </div>
+      <div class="feat-act">
+        <a class="btn btn-aff btn-lg" href={w.aff} target="_blank" rel={AFF_REL}>到官网看套餐</a>
+        <small>价格与活动以官网结算页为准</small>
+      </div>
+    </section>
 
-  <section aria-labelledby="who-we-help">
-    <h2 id="who-we-help">机场E家能帮你解决什么</h2>
-    <ul class="feature-list">
-      <li>刚接触机场代理，不知道从哪里开始了解</li>
-      <li>已经在用，但想找性价比更高或更稳定的选择</li>
-      <li>想弄清楚协议、节点、线路这些概念到底是什么意思</li>
-      <li>遇到连接问题，想知道怎么排查</li>
-    </ul>
-  </section>
+    <h2 class="sec-h">机场精选 TOP7</h2>
+    <div class="bc-list bc-list--3d">
+      {top7.map((id, i) => <BrandCard brand={BRANDS[id]!} rank={i + 1} top={i === 0} />)}
+    </div>
+    <p><a class="btn btn-ghost" href="/airports/">看全部 29 个品牌</a></p>
 
-  <section aria-labelledby="entry-points">
-    <h2 id="entry-points">现在可以看什么</h2>
-    <ul class="entry-links">
-      <li>
-        <span class="entry-links__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="10" r="7.25" />
-            <path d="M12.6 7.4 11.1 11.1 7.4 12.6 8.9 8.9Z" fill="currentColor" stroke="none" />
-          </svg>
-        </span>
-        <div>
-          <a href="/airports/">机场导航</a>
-          <p>浏览已收录的机场代理服务商目录，逐一查看官方信息与第三方资料。</p>
-        </div>
-      </li>
-      <li>
-        <span class="entry-links__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="11" width="3" height="6" />
-            <rect x="8.5" y="7" width="3" height="10" />
-            <rect x="13" y="3.5" width="3" height="13.5" />
-          </svg>
-        </span>
-        <div>
-          <a href="/rankings/">机场推荐</a>
-          <p>
-            按综合、性价比、稳定性、新手友好等维度整理的候选建议，包括<a href="/rankings/best-value/">性价比机场</a>和<a href="/rankings/most-stable/">2026最稳定的机场</a>专项榜。
-          </p>
-        </div>
-      </li>
-      <li>
-        <span class="entry-links__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 5.2c-1.4-1-3.8-1.4-5.6-1v11c1.8-.4 4.2 0 5.6 1 1.4-1 3.8-1.4 5.6-1v-11c-1.8-.4-4.2 0-5.6 1Z" />
-            <path d="M10 5.2v11" />
-          </svg>
-        </span>
-        <div>
-          <a href="/knowledge/">知识库</a>
-          <p>机场代理是什么、和 VPN 有什么区别、挑选时该看哪些维度。</p>
-        </div>
-      </li>
-      <li>
-        <span class="entry-links__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="10" r="7.25" />
-            <path d="M8.6 7.2 12.4 10 8.6 12.8Z" fill="currentColor" stroke="none" />
-          </svg>
-        </span>
-        <div>
-          <a href="/tutorials/">使用教程</a>
-          <p>Clash、小火箭等客户端怎么装、怎么导入订阅、怎么连接。</p>
-        </div>
-      </li>
-      <li>
-        <span class="entry-links__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="10" r="7.25" />
-            <path d="M7.9 8a2.1 2.1 0 1 1 3.15 1.82c-.7.4-1.05.86-1.05 1.53v.25" />
-            <circle cx="10" cy="14.1" r="0.6" fill="currentColor" stroke="none" />
-          </svg>
-        </span>
-        <div>
-          <a href="/troubleshooting/">常见问题</a>
-          <p>连不上、网页打不开、订阅导入失败这类问题的排查思路。</p>
-        </div>
-      </li>
-    </ul>
-  </section>
+    <h2 class="sec-h">七家并排看</h2>
+    <BrandTable ids={top7} cols={['price', 'line', 'protocols', 'src']} />
 
-  {
-    contentGroups.length > 0 && (
-      <section aria-labelledby="content-hub">
-        <h2 id="content-hub">机场知识与使用指南</h2>
-        <p>从怎么选、怎么用到常见问题，按主题整理的已发布文章：</p>
-        {
-          contentGroups.map((group) => (
-            <div class="content-group">
-              <h3>{group.title}</h3>
-              <ul class="content-group__list">
-                {group.items.map((item) => (
-                  <li>
-                    <a href={item.href}>{item.title}</a>
-                    <p>{item.description}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </section>
-    )
-  }
+    <h2 class="sec-h">三步选对</h2>
+    <ol class="steps">
+      <li><h3>先分清要哪一类</h3><p>只想装个 App 就用：看 <a href="/vpn/">VPN 怎么选</a>；要分流、多设备、长期用：看 <a href="/ladder/">梯子怎么选</a> 与 <a href="/airports/">机场导航</a>。</p></li>
+      <li><h3>小额包月试用</h3><p>挑资料相对完整的 2 家，各买最低档包月，别一上来买年付。</p></li>
+      <li><h3>晚高峰自己验证</h3><p>连续几天在你常用的时段观察，稳定再续费；连不上先看 <a href="/troubleshooting/">排错清单</a>。</p></li>
+    </ol>
 
-  {topPicksItemListJsonLd && <script type="application/ld+json" set:html={JSON.stringify(topPicksItemListJsonLd)} />}
+    <h2 class="sec-h">最近更新</h2>
+    <div class="cards-grid">
+      {articles.map((a) => <a class="card-link" href={getArticleHref(a)}><i>{a.data.category}</i><b>{a.data.title}</b><span>{a.data.description}</span></a>)}
+    </div>
+
+    <Faq items={faq} />
+  </main>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </BaseLayout>

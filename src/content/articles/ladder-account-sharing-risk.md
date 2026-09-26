@@ -22,7 +22,7 @@ relatedTopics:
 - 服务方通常会根据请求的设备数量、请求来源做统计，超出限制可能被限制或封禁；
 - 链接一旦泄露，只能通过重置订阅或更换链接来失效。
 
-订阅的基础概念可先看 [订阅链接怎么用](/knowledge/airport-subscription-guide/)。
+订阅的基础概念可先看 [订阅链接怎么用](/tutorials/how-to-import-subscription/)。
 
 ## 三种常见的共享情形
 

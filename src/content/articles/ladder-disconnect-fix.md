@@ -44,7 +44,7 @@ relatedTopics:
 ### 第三层：客户端与配置
 
 1. 更新客户端到最新版本，旧版本可能与新的协议或订阅格式不兼容；
-2. 重新更新订阅，确认节点列表是最新的，方法见 [订阅导入说明](/knowledge/airport-subscription-guide/)；
+2. 重新更新订阅，确认节点列表是最新的，方法见 [订阅导入说明](/tutorials/how-to-import-subscription/)；
 3. 检查是否同时开了多个代理或 VPN，需要只保留一个；
 4. 如果使用 TUN 模式，尝试切回系统代理，看是否稳定；
 5. 配置导入报错的话，先看 [Clash 配置导入失败](/troubleshooting/clash-import-failed/)。

@@ -25,7 +25,7 @@ relatedTopics:
 | 分应用代理 | 取决于客户端能力，部分客户端支持规则分流 | 多数主流客户端支持按应用选择 |
 | 常见问题 | 商店账号地区、客户端付费 | 后台被杀、通知栏保活、厂商限制 |
 
-买之前先确认服务方给出的教程或客户端说明里，有没有你手机系统对应的版本，并且能导入订阅。导入方式可参考 [订阅链接怎么导入](/knowledge/airport-subscription-guide/) 以及 [iOS 客户端上手教程](/tutorials/ios-shadowrocket-setup/)、[安卓客户端上手教程](/tutorials/android-setup/)。
+买之前先确认服务方给出的教程或客户端说明里，有没有你手机系统对应的版本，并且能导入订阅。导入方式可参考 [订阅链接怎么导入](/tutorials/how-to-import-subscription/) 以及 [iOS 客户端上手教程](/tutorials/ios-shadowrocket-setup/)、[安卓客户端上手教程](/tutorials/android-setup/)。
 
 ## 手机独有的四个使用问题
 

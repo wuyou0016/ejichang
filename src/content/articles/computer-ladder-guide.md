@@ -61,7 +61,7 @@ relatedTopics:
 
 ## 选购时的几个补充建议
 
-- 先确认服务提供的配置格式是否适配你想用的客户端，见 [订阅导入方式](/knowledge/airport-subscription-guide/)；
+- 先确认服务提供的配置格式是否适配你想用的客户端，见 [订阅导入方式](/tutorials/how-to-import-subscription/)；
 - 需要在笔记本和台式机上同时用，先看设备数限制；
 - 电脑上追求稳定，比手机更需要观察晚高峰，具体方法见 [稳定梯子怎么判断](/knowledge/stable-ladder-guide/)。
 

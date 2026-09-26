@@ -16,12 +16,9 @@ interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   keywords?: string[];
-  // 可选，仅用于给个别页面（目前只有首页）加一个 body class 挂纯视觉背景，
-  // 不传就是原来的样子，不影响其它页面。
-  bodyClass?: string;
 }
 
-const { title, description, robots, ogType, ogImage, publishedTime, modifiedTime, keywords, bodyClass } = Astro.props;
+const { title, description, robots, ogType, ogImage, publishedTime, modifiedTime, keywords } = Astro.props;
 const pathname = Astro.url.pathname;
 const homepageUrl = resolveCanonicalUrl('/');
 
@@ -46,15 +43,16 @@ const organizationJsonLd = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#ffcb2e" />
     <script is:inline>
-      // 在首次绘制前设置 data-theme，避免切换主题时出现刷新闪烁（FOUC）。
-      // 优先级：用户在本站保存过的选择 > 系统颜色偏好。纯内联、同步执行，不依赖外部脚本。
+      // 首次绘制前设置 data-theme，避免闪烁。优先级：本站保存的选择 > 默认浅色。
       (function () {
         try {
-          var stored = localStorage.getItem('ej-theme');
-          var theme = stored === 'light' || stored === 'dark' ? stored : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          document.documentElement.setAttribute('data-theme', theme);
-        } catch (e) {}
+          var s = localStorage.getItem('ej-theme');
+          document.documentElement.setAttribute('data-theme', s === 'dark' ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
       })();
     </script>
     <SEOHead
@@ -72,11 +70,47 @@ const organizationJsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
     <Analytics />
   </head>
-  <body class={bodyClass}>
+  <body>
     <Header />
-    <main class="container">
-      <slot />
-    </main>
+    <slot />
     <Footer />
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var tb = document.getElementById('themeBtn');
+        function sync() { if (tb) tb.setAttribute('aria-pressed', root.getAttribute('data-theme') === 'dark' ? 'true' : 'false'); }
+        if (tb) {
+          tb.addEventListener('click', function () {
+            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            try { localStorage.setItem('ej-theme', next); } catch (e) {}
+            sync();
+          });
+        }
+        sync();
+        var nb = document.getElementById('navBtn'), nav = document.getElementById('siteNav');
+        if (nb && nav) {
+          nb.addEventListener('click', function () {
+            var open = nav.classList.toggle('open');
+            nb.setAttribute('aria-expanded', open ? 'true' : 'false');
+          });
+        }
+        var tocLinks = document.querySelectorAll('.toc a[href^="#"]');
+        if (tocLinks.length && 'IntersectionObserver' in window) {
+          var map = {};
+          tocLinks.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+          var io = new IntersectionObserver(function (es) {
+            es.forEach(function (e) {
+              if (e.isIntersecting) {
+                tocLinks.forEach(function (a) { a.classList.remove('on'); });
+                var a = map[e.target.id];
+                if (a) a.classList.add('on');
+              }
+            });
+          }, { rootMargin: '0px 0px -70% 0px' });
+          Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+        }
+      })();
+    </script>
   </body>
 </html>

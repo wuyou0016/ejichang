@@ -1,44 +1,50 @@
 ---
 import { siteConfig } from '../config/site';
-
-// 只链接已真实存在的页面。机场评测等板块尚未建成时，
-// 不在此处提前放入链接，避免死链；友情链接同理，不虚构合作关系。
-const coreLinks = [
-  { label: '首页', href: '/' },
-  { label: '机场导航', href: '/airports/' },
-  { label: '机场推荐', href: '/rankings/' },
-  { label: '知识库', href: '/knowledge/' },
-  { label: '使用教程', href: '/tutorials/' },
-  { label: '常见问题', href: '/troubleshooting/' },
-];
-
-const currentYear = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="container site-footer__inner">
-    <div>
-      <h2>{siteConfig.brandName}</h2>
-      <p>{siteConfig.description}</p>
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-grid">
+      <div>
+        <h2>{siteConfig.brandName}</h2>
+        <p>梯子、VPN、机场三类翻墙工具的导航与选购资料：价格、线路、协议逐条标注来源，没有依据的测速与评分一律不写，并附上客户端与排错教程。</p>
+      </div>
+      <div>
+        <h2>找工具</h2>
+        <ul>
+          <li><a href="/ladder/">梯子怎么选</a></li>
+          <li><a href="/vpn/">VPN 怎么选</a></li>
+          <li><a href="/airports/">机场导航</a></li>
+          <li><a href="/subscription/">订阅链接</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>动手教程</h2>
+        <ul>
+          <li><a href="/clients/">客户端教程</a></li>
+          <li><a href="/protocols/">协议对比</a></li>
+          <li><a href="/knowledge/">知识库</a></li>
+          <li><a href="/troubleshooting/">故障排查</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>关于本站</h2>
+        <ul>
+          <li><a href="/about/">关于机场E家</a></li>
+          <li><a href="/method/">资料与测试说明</a></li>
+          <li><a href="/faq/">常见问题</a></li>
+          <li><a href="/disclosure/">推广披露</a></li>
+          <li><a href="/disclaimer/">免责声明</a></li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <h2>主要导航</h2>
-      <ul>
-        {
-          coreLinks.map((item) => (
-            <li>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ))
-        }
-      </ul>
+    <div class="friend-links">
+      <span class="label">友情链接</span>
+      <a href="https://jichangbao.com/" target="_blank" rel="noopener">机场宝藏推荐</a>
+      <a href="https://rocketjichang.com/" target="_blank" rel="noopener">火箭机场</a>
+      <a href="https://jichangtj.net/" target="_blank" rel="noopener">机场梯子推荐</a>
+      <a href="https://itizi.mom/" target="_blank" rel="noopener">i梯子导航</a>
     </div>
-  </div>
-  <div class="container site-footer__note">
-    <h2>网站说明</h2>
-    <p>本站提供机场信息整理、使用知识、测试数据与编辑推荐。不同来源的数据会明确标注来源类型（官方公开信息、第三方资料、本站实测、编辑观点），不会混在一起呈现。内容会持续更新与扩充。</p>
-  </div>
-  <div class="container site-footer__bottom">
-    <p>&copy; {currentYear} {siteConfig.brandName}（{siteConfig.brandNameEn}）</p>
+    <p class="foot-disc">本站含联盟推广链接，通过链接订阅时本站可能获得佣金，你的支付金额不变。价格与活动以官网结算页为准；请遵守你所在地区的法律法规。© 2026 {siteConfig.brandName}（ejichang.com）</p>
   </div>
 </footer>

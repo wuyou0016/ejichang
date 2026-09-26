@@ -114,3 +114,26 @@
 - **机场稳定**：`/rankings/most-stable/` 是榜单结果页，`/knowledge/airport-speed-test-explained/` 是"怎么理解测速/稳定性数据"的方法论页，`/troubleshooting/airport-node-slow/` 是"现在慢了怎么办"的现场操作页——三者标题、意图、内容形态都不同，没有重叠。
 - **机场跑路 / 免费机场 / 自建节点 / 机场支付**：均为本轮新增，全站目前只有一个页面承载，无冲突。
 - 没有发现需要合并或删除的重复页面。
+
+---
+
+## 六、2026-09 改版新增（以此为准，上文为旧结构）
+
+| URL | 主词 | 说明 |
+| --- | --- | --- |
+| `/ladder/` | 梯子 | 一级主词 Hub：类型、便宜/稳定/免费；翻墙作为辅助词放在子文章 |
+| `/vpn/` | VPN | 一级主词 Hub：VPN 与机场取舍、选 VPN 看什么 |
+| `/airports/` | 机场导航 | 品牌资料库 |
+| `/subscription/` | 订阅链接 | 订阅 Hub |
+| `/clients/` | 客户端教程 | 教程 Hub（文章仍在 /tutorials/） |
+| `/protocols/` | 机场协议 | 协议 Hub |
+| `/rankings/` 及三子页 | 机场推荐 / 稳定 / 性价比 / 新手 | 不含测速与评分 |
+| `/tools/` | 自测 | 自测清单与记录表 |
+| `/knowledge/cheap-ladder-guide/` | 便宜梯子 | |
+| `/knowledge/stable-ladder-guide/` | 稳定梯子 | |
+| `/knowledge/free-ladder-risk/` | 免费梯子 | |
+| `/knowledge/fanqiang-software-types/` | 翻墙软件 | 翻墙辅助词 |
+| `/knowledge/fanqiang-safety/` | 翻墙安全吗 | 翻墙辅助词 |
+| `/knowledge/vpn-recommend-how-to-judge/` | VPN推荐 | |
+| `/knowledge/free-vpn-risk/` | 免费VPN | |
+| `/knowledge/vpn-protocols-explained/` | VPN协议 | |

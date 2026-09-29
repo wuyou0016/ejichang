@@ -137,3 +137,11 @@
 | `/knowledge/vpn-recommend-how-to-judge/` | VPN推荐 | |
 | `/knowledge/free-vpn-risk/` | 免费VPN | |
 | `/knowledge/vpn-protocols-explained/` | VPN协议 | |
+
+## 七、2026-09-29 新增（本轮补充）
+
+| URL | 主词 | 说明 |
+| --- | --- | --- |
+| `/troubleshooting/fanqiang-verification-triggered/` | 梯子 / VPN | 事务型：开着梯子或VPN后网页弹验证码、App提示异地登录，与IP信誉/地区变化相关的排查，不与 airport-privacy-safety（隐私边界）、airport-scam-risk（跑路风险）重叠 |
+| `/knowledge/webrtc-leak-explained/` | 机场 / VPN | 信息型：WebRTC 泄露真实IP的原理与检测，与 dns-leak-note（DNS泄露）是不同机制、并列意图，不重叠 |
+| `/tutorials/v2rayn-windows-setup/` | 机场 / 客户端 | 操作型：Windows 上 v2rayN 客户端的下载、订阅导入与连接步骤，与 clash-desktop-setup 为不同软件的独立教程，不重叠 |

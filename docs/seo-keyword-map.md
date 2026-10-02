@@ -137,3 +137,11 @@
 | `/knowledge/vpn-recommend-how-to-judge/` | VPN推荐 | |
 | `/knowledge/free-vpn-risk/` | 免费VPN | |
 | `/knowledge/vpn-protocols-explained/` | VPN协议 | |
+
+## 七、2026-10-02 新增（独立搜索意图，不与上述页面重叠）
+
+| URL | 主词/核心意图 | 说明 |
+| --- | --- | --- |
+| `/troubleshooting/cross-region-account-verification/` | 换节点后账号异地验证 | 排障类：解释切换节点触发平台风控（异地登录验证/限制）的原因，与隐私安全（airport-privacy-safety）、地区选择（vpn-server-location-guide）意图不同，全站唯一承载页 |
+| `/knowledge/overseas-access-china-apps/` | 国外访问国内网站/App（回国方向） | 使用场景类：面向海外留学生/工作者"回国方向"的需求，与现有"出国方向"内容（ladder-for-study 等）方向相反、意图不同，全站唯一承载页 |
+| `/tutorials/browser-extension-proxy-setup/` | 浏览器插件用机场代理 | 客户端教程类：浏览器代理插件配置的完整操作教程，与 computer-ladder-guide（决策/原理层面的接入方式对比）互补，不重复其内容 |

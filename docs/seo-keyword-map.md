@@ -137,3 +137,11 @@
 | `/knowledge/vpn-recommend-how-to-judge/` | VPN推荐 | |
 | `/knowledge/free-vpn-risk/` | 免费VPN | |
 | `/knowledge/vpn-protocols-explained/` | VPN协议 | |
+
+## 七、2026-10-06 新增（自动内容批次）
+
+| URL | 主词 | 说明 |
+| --- | --- | --- |
+| `/tutorials/airport-device-migration/` | 机场订阅、换设备 | 换手机/电脑/路由器后订阅迁移步骤，与 airport-getting-started（首次使用）、airport-multi-device（设备数概念）意图不同 |
+| `/knowledge/subscription-conversion-explained/` | 订阅转换、机场客户端 | 订阅格式转换的原理、适用场景与隐私风险，与 how-to-import-subscription（通用导入步骤）意图不同 |
+| `/knowledge/access-china-content-abroad/` | 回国线路、VPN、机场 | "回国"方向访问国内内容的原理与选购注意，与站内现有"出国"方向文章意图相反、不重叠 |

@@ -137,3 +137,6 @@
 | `/knowledge/vpn-recommend-how-to-judge/` | VPN推荐 | |
 | `/knowledge/free-vpn-risk/` | 免费VPN | |
 | `/knowledge/vpn-protocols-explained/` | VPN协议 | |
+| `/tutorials/clash-rules-setup/` | Clash分流规则 | 梯子/机场辅助词（客户端教程） |
+| `/knowledge/ladder-for-travel/` | 梯子 | 使用场景：出差旅行 |
+| `/knowledge/cheap-vpn-guide/` | 便宜VPN | VPN主词，与 cheap-ladder-guide 区分定价模型 |

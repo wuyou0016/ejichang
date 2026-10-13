@@ -137,3 +137,13 @@
 | `/knowledge/vpn-recommend-how-to-judge/` | VPN推荐 | |
 | `/knowledge/free-vpn-risk/` | 免费VPN | |
 | `/knowledge/vpn-protocols-explained/` | VPN协议 | |
+
+---
+
+## 七、2026-10-13 新增
+
+| URL | 主词 | 说明 |
+| --- | --- | --- |
+| `/knowledge/linux-ladder-guide/` | 梯子（电脑/客户端前缀） | Linux 下的客户端与命令行接入方式对比，电脑系列（phone/computer-ladder-guide）的平台补充 |
+| `/tutorials/subscription-device-migration/` | 机场（订阅前缀） | 换手机/电脑后订阅迁移的操作步骤，与"首次导入"（how-to-import-subscription）、"设备数限制"（airport-multi-device）意图不同 |
+| `/knowledge/client-download-safety/` | 梯子/机场（客户端前缀） | 客户端软件下载来源安全，区别于账号/订阅层面的风险（ladder-account-sharing-risk、free-ladder-risk） |
